@@ -1,0 +1,52 @@
+;コンフィグで色々調整する部分
+@EVENT_ABLE_COMMON(ARG)
+
+
+;実行できるスキットを検索
+;更新はSHOPが呼び出される瞬間
+@SEARCH_EVENT_ABLE(ARG)
+
+VARSET LOCAL:1
+VARSET V
+FOR LOCAL:0, 0, 1000
+	TRYCALLFORM EVENT_ABLE_{LOCAL:0}
+	IF RESULT
+		;PRINTFORML V:{V:(LOCAL:1)} = {LOCAL:0}
+		V:(LOCAL:1) = LOCAL:0
+		LOCAL:1 += 1
+		RESULT = 0
+	ENDIF
+NEXT
+
+;可能なスキットがあれば、スキットのタイトルを枠外に表示
+@SUB_EVENT
+IF FIRSTSUBEVENT(V)
+	CALLFORM EVENT_SETUP_{V}
+	SIF RESULT:1
+		FLAG:口上文字色使用 = 1
+	SIF FLAG:口上文字色使用 == 1
+		CALL SET_COLOR(FLAG:イベント用ターゲット一時保存)
+	CALLFORM EVENT_K{V}
+	RESETCOLOR
+	ARRAYSHIFT V, -1, 0
+	FLAG:口上文字色使用 = 0
+ENDIF
+;CALLFORM KOJO_EVENT_NAME_{ARG}_{J}
+;IF J > 0
+;	TSTR =[シ]%TSTR%
+;	PRINTBUTTONLC TSTR , 150
+;ENDIF
+;-------------------------------------------------
+;初回EVENT判定関数@FIRSTEVENT
+;式中で使用する関数です。理論上無限にイベントを登録できます。
+;EVENTと派生ごとに保存される初回判定用関数です。
+;TFLAG:イベント番号（TFLAG:10）を自動で参照するので、現在発生しいるEVENTごとに番号が独立して保存されます。
+;なお、他のイベントの初回判定を参照する場合は、ARG:3にイベント番号を入れることで一応可能です。
+;ARGはイベント番号、ARG:1はキャラ登録番号（省略するとTARGET）、ARG:2が真だと初回判定を更新しない（参照のみ）
+;CSTR:0で管理します
+;-------------------------------------------------
+@FIRSTSUBEVENT(ARG, ARG:1 = -2, ARG:2, ARG:3 = -2)
+#FUNCTION
+ARG:1 = ARG:1 == -2 ? MASTER # ARG:1
+ARG:3 = ARG:3 == -2 ? TFLAG:イベント番号 # ARG:3
+RETURNF FIRSTPROCESS(ARG:1, @"EVENT%TOSTR(ARG:3)%_%TOSTR(ARG)%", ARG:2)

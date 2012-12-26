@@ -1,0 +1,41 @@
+;コンフィグで色々調整する部分
+@SCENARIO_ABLE_COMMON(ARG)
+
+
+;実行できるスキットを検索
+;更新はSHOPが呼び出される瞬間
+;ARG ターゲットのキャラ登録番号
+@SEARCH_SCENARIO_ABLE(ARG)
+
+VARSET LOCAL:1
+VARSET J
+FOR LOCAL:0, 0, 1000
+	TRYCALLFORM KOJO_EVENT_ABLE_{ARG}_{LOCAL:0}
+	IF RESULT
+		;PRINTFORML J:{J:(LOCAL:1)} = {LOCAL:0}
+		J:(LOCAL:1) = LOCAL:0
+		LOCAL:1 += 1
+		RESULT = 0
+	ENDIF
+NEXT
+
+;シナリオS サブイベントはE  アフターコミュはA スキットはK
+
+;可能なスキットがあれば、スキットのタイトルを枠外に表示
+@SCENARIO
+IF FIRSTTIME(J)
+	CALLFORM KOJO_EVENT_SETUP_{FLAG:イベント用ターゲット一時保存}_{J}
+	SIF RESULT:1
+		FLAG:口上文字色使用 = 1
+	SIF FLAG:口上文字色使用 == 1
+		CALL SET_COLOR(FLAG:イベント用ターゲット一時保存)
+	CALLFORM KOJO_EVENT_K{FLAG:イベント用ターゲット一時保存}_{J}
+	RESETCOLOR
+	ARRAYSHIFT J, -1, 0
+	FLAG:口上文字色使用 = 0
+ENDIF
+;CALLFORM KOJO_EVENT_NAME_{ARG}_{J}
+;IF J > 0
+;	TSTR =[シ]%TSTR%
+;	PRINTBUTTONLC TSTR , 150
+;ENDIF

@@ -1,0 +1,34 @@
+;コンフィグで色々調整する部分
+@SKIT_ABLE_COMMON(ARG)
+
+
+;実行できるスキットを検索
+;更新はSHOPが呼び出される瞬間
+@SEARCH_SKIT_ABLE
+
+VARSET LOCAL:1
+VARSET K
+FOR LOCAL:0, 0, 1000
+	TRYCALLFORM SKIT_ABLE{LOCAL:0}
+	IF RESULT
+		;PRINTFORML K:{K:(LOCAL:1)} = {LOCAL:0}
+		K:(LOCAL:1) = LOCAL:0
+		LOCAL:1 += 1
+		RESULT = 0
+	ENDIF
+NEXT
+
+;シナリオS サブイベントはE  アフターコミュはA スキットはK
+
+;可能なスキットがあれば、スキットのタイトルを枠外に表示
+@SKIT
+;K:0でK:1が存在するなら配列をずらす
+CALL SEARCH_SKIT_ABLE
+IF K > 0
+	CALLFORM SKITNAME{K}
+	TSTR =[SKT] - %TSTR%
+	PRINTBUTTONLC TSTR , 150
+ENDIF
+
+
+
