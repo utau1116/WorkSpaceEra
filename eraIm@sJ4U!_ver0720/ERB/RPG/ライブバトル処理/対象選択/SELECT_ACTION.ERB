@@ -1,24 +1,22 @@
 
 ;ターゲット選択
-;ARG:0	対象の取り方(0:敵単体　1:敵全体　2:自分　3:味方単体　4:味方全体　5:敵味方全体　6:敵味方単体)
+;ARG	対象の取り方(0:敵単体　1:敵全体　2:自分　3:味方単体　4:味方全体　5:敵味方全体　6:敵味方単体)
 ;ARG:1	自分が対象外かどうか(自分を対象外にする場合、自分のIDを入れておく)
 ;RETURN	対象(0:キャンセル　1～5：味方　11～20：敵　30：自分　31：味方全体　32：敵全体　33：敵味方全体)
-@SELECT_TARGET_POSITION(ARG:0)
+@SELECT_TARGET_POSITION(ARG)
 ;LOCAL
 ;0		LOOP
 ;1～10	利用可能フラグ
 ;11		TEMP
 ;12		TEMP
 
-
-
 ;コンフィグ次第では自動選択
-IF FLAG:6710 && (ARG:0 == 0 || ARG:0 == 6)
+IF FLAG:6710 && (ARG == 0 || ARG == 6)
 	;敵単体なら完全自動
 	LOCAL:11 = 11
-	FOR LOCAL:0, 1, 11
-		IF TFLAG:(LOCAL:0 + 1000) && CFLAG:(LOCAL:0):気絶状態 == 0
-			LOCAL:11 = LOCAL:0 + 10
+	FOR LOCAL, 1, 11
+		IF TFLAG:(LOCAL + 1000) && CFLAG:LOCAL:気絶状態 == 0
+			LOCAL:11 = LOCAL + 10
 			BREAK
 		ENDIF
 	NEXT
@@ -28,15 +26,15 @@ ENDIF
 IF FLAG:対象選択省略
 	;一択省略系
 	LOCAL:11 = 11
-	SELECTCASE ARG:0
+	SELECTCASE ARG
 		CASE 0
 			;敵単体　コンフィグ値によらず１択なら省略
 			LOCAL:11 = 11
 			LOCAL:12 = 0
-			FOR LOCAL:0, 1, 11
-				IF TFLAG:(LOCAL:0 + 1000) && CFLAG:(LOCAL:0):気絶状態 == 0
+			FOR LOCAL, 1, 11
+				IF TFLAG:(LOCAL + 1000) && CFLAG:LOCAL:気絶状態 == 0
 					;敵が居ればその敵を覚えて、カウントアップ
-					LOCAL:11 = LOCAL:0 + 10
+					LOCAL:11 = LOCAL + 10
 					LOCAL:12 += 1
 				ENDIF
 			NEXT
@@ -59,10 +57,10 @@ IF FLAG:対象選択省略
 			;味方単体　コンフィグ値によらず１択なら省略
 			LOCAL:11 = 1
 			LOCAL:12 = 0
-			FOR LOCAL:0, 1, 6
-				IF FLAG:(LOCAL:0 + 1079) > 0
+			FOR LOCAL, 1, 6
+				IF FLAG:(LOCAL + 1079) > 0
 					;居ればカウントアップ
-					LOCAL:11 = LOCAL:0
+					LOCAL:11 = LOCAL
 					LOCAL:12 += 1
 				ENDIF
 			NEXT
@@ -90,49 +88,49 @@ IF FLAG:対象選択省略
 ENDIF
 
 
-IF ARG:0 == 2 || ARG:0 == 3 || ARG:0 == 4
+IF ARG == 2 || ARG == 3 || ARG == 4
 	PRINTFORML 誰に使いますか？
 ELSE
 	PRINTFORML 誰を狙いますか？
 ENDIF
 
-FOR LOCAL:0, 1, 11
-	LOCAL:(LOCAL:0) = 0
+FOR LOCAL, 1, 11
+	LOCAL:LOCAL = 0
 NEXT
 
 
 ;敵味方単体は元々の設定でそうなる場合と、特定の条件を満たした場合がある
-IF (ARG:0 == 6) || (TFLAG:対象制限解除 && (ARG:0 == 0 || ARG:0 == 3))
+IF (ARG == 6) || (TFLAG:対象制限解除 && (ARG == 0 || ARG == 3))
 	;敵味方単体を選択
 	;制限解除＋単体対象スキルの場合も、敵味方単体を選択
-	FOR LOCAL:0, 1, 21
+	FOR LOCAL, 1, 21
 		;初期化
-		LOCAL:(LOCAL:0) = 0
+		LOCAL:LOCAL = 0
 	NEXT
 	
-	FOR LOCAL:0, 1, 6
-		IF FLAG:(LOCAL:0 + 1079) > 0 && (ARG:1 == 0 || (LOCAL:0 + 1079) != ARG:1)
-			PRINTFORM [{LOCAL:0, 2}] %CALLNAME:(FLAG:(LOCAL:0 + 1079)),21,LEFT% 
+	FOR LOCAL, 1, 6
+		IF FLAG:(LOCAL + 1079) > 0 && (ARG:1 == 0 || (LOCAL + 1079) != ARG:1)
+			PRINTFORM [{LOCAL, 2}] %CALLNAME:(FLAG:(LOCAL + 1079)),21,LEFT% 
 			
-			CALL PRINT_HPMPEP(FLAG:(LOCAL:0 + 1079), 0)
-			CALL PRINT_HPMPEP(FLAG:(LOCAL:0 + 1079), 1)
-			CALL PRINT_HPMPEP(FLAG:(LOCAL:0 + 1079), 2)
+			CALL PRINT_HPMPEP(FLAG:(LOCAL + 1079), 0)
+			CALL PRINT_HPMPEP(FLAG:(LOCAL + 1079), 1)
+			CALL PRINT_HPMPEP(FLAG:(LOCAL + 1079), 2)
 			PRINT      状態異常：
-			CALL SHOW_BAD_STATUS(FLAG:(LOCAL:0 + 1079))
+			CALL SHOW_BAD_STATUS(FLAG:(LOCAL + 1079))
 			PRINTL 
-			LOCAL:(LOCAL:0) = 1
+			LOCAL:LOCAL = 1
 		ENDIF
 	NEXT
-	FOR LOCAL:0, 11, 21
-		IF TFLAG:(LOCAL:0 - 10 + 1000) > 0 && CFLAG:(LOCAL:0 - 10):気絶状態 == 0
-			PRINTFORM [{LOCAL:0, 2}] %CALLNAME:(LOCAL:0 - 10), 21, LEFT%
+	FOR LOCAL, 11, 21
+		IF TFLAG:(LOCAL - 10 + 1000) > 0 && CFLAG:(LOCAL - 10):気絶状態 == 0
+			PRINTFORM [{LOCAL, 2}] %CALLNAME:(LOCAL - 10), 21, LEFT%
 			IF FLAG:5 == 0
 				;EASYならHP・EP表示
-				CALL PRINT_HPMPEP((LOCAL:0 - 10), 0)
-				CALL PRINT_HPMPEP((LOCAL:0 - 10), 2)
+				CALL PRINT_HPMPEP((LOCAL - 10), 0)
+				CALL PRINT_HPMPEP((LOCAL - 10), 2)
 			ENDIF
 			PRINTL 
-			LOCAL:(LOCAL:0) = 1
+			LOCAL:LOCAL = 1
 		ENDIF
 	NEXT
 	PRINTFORML [ 0] キャンセル
@@ -154,18 +152,18 @@ IF (ARG:0 == 6) || (TFLAG:対象制限解除 && (ARG:0 == 0 || ARG:0 == 3))
 ENDIF
 
 
-SELECTCASE ARG:0
+SELECTCASE ARG
 	CASE 0
 		;敵単体を選択
-		FOR LOCAL:0, 1, 11
-			IF TFLAG:(LOCAL:0 + 1000) > 0 && CFLAG:(LOCAL:0):気絶状態 == 0
-				PRINTFORM [{LOCAL:0, 2}] %CALLNAME:(LOCAL:0), 21, LEFT%
+		FOR LOCAL, 1, 11
+			IF TFLAG:(LOCAL + 1000) > 0 && CFLAG:LOCAL:気絶状態 == 0
+				PRINTFORM [{LOCAL, 2}] %CALLNAME:LOCAL, 21, LEFT%
 				PRINTFORM  
 				CALL STARMARK_Y
-				PRINTFORM  {BASE:(LOCAL:0):HP,6}/{MAXBASE:(LOCAL:0):HP,6}
-				CALL PRINT_HPMPEP(LOCAL:0, 1)
+				PRINTFORM  {BASE:LOCAL:HP,6}/{MAXBASE:LOCAL:HP,6}
+				CALL PRINT_HPMPEP(LOCAL, 1)
 				PRINTL 
-			LOCAL:(LOCAL:0) = 1
+			LOCAL:LOCAL = 1
 			ENDIF
 		NEXT
 		PRINTFORML [ 0] キャンセル
@@ -204,7 +202,6 @@ SELECTCASE ARG:0
 		;自分を選択
 		PRINTFORML [ 1] 自分
 		PRINTFORML [ 0] キャンセル
-		
 		$INPUT_LOOP_2
 		INPUT
 		
@@ -218,21 +215,21 @@ SELECTCASE ARG:0
 		ENDIF
 	CASE 3
 		;味方単体を選択
-		FOR LOCAL:0, 1, 6
-			IF FLAG:(LOCAL:0 + 1079) > 0
-				PRINTFORM [{LOCAL:0, 2}] %CALLNAME:(FLAG:(LOCAL:0 + 1079)),21,LEFT% 
+		FOR LOCAL, 1, 6
+			IF FLAG:(LOCAL + 1079) > 0
+				PRINTFORM [{LOCAL, 2}] %CALLNAME:(FLAG:(LOCAL + 1079)),21,LEFT% 
 				CALL STARMARK_Y
-				PRINTFORM  {BASE:(FLAG:(LOCAL:0 + 1079)):HP,6}/{MAXBASE:(FLAG:(LOCAL:0 + 1079)):HP,6} 
+				PRINTFORM  {BASE:(FLAG:(LOCAL + 1079)):HP,6}/{MAXBASE:(FLAG:(LOCAL + 1079)):HP,6} 
 				CALL HEARTMARK_P
-				PRINTFORM {BASE:(FLAG:(LOCAL:0 + 1079)):MP,3}/{MAXBASE:(FLAG:(LOCAL:0 + 1079)):MP,3} 
-				CALL PRINT_HPMPEP(FLAG:(LOCAL:0 + 1079), 2)
+				PRINTFORM {BASE:(FLAG:(LOCAL + 1079)):MP,3}/{MAXBASE:(FLAG:(LOCAL + 1079)):MP,3} 
+				CALL PRINT_HPMPEP(FLAG:(LOCAL + 1079), 2)
 				PRINTL 
 				
 				PRINTL 
 				PRINT      状態異常：
-				CALL SHOW_BAD_STATUS(FLAG:(LOCAL:0 + 1079))
+				CALL SHOW_BAD_STATUS(FLAG:(LOCAL + 1079))
 				PRINTL 
-				LOCAL:(LOCAL:0) = 1
+				LOCAL:LOCAL = 1
 			ENDIF
 		NEXT
 		PRINTFORML [ 0] キャンセル

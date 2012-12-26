@@ -12,20 +12,20 @@
 ;22		確率最大値
 ;23		乱数等の保持
 ;24		キャラ決定用
-FOR LOCAL:0, 1, 25
-	LOCAL:(LOCAL:0) = 0
+FOR LOCAL, 1, 25
+	LOCAL:LOCAL = 0
 NEXT
-FOR LOCAL:0, 1, 6
-	IF FLAG:(LOCAL:0 + 1079) > 0 && CFLAG:(FLAG:(LOCAL:0 + 1079)):気絶状態 <= ARG:2
-		LOCAL:21 += CFLAG:(ARG:0):(LOCAL:0 + 1270)
+FOR LOCAL, 1, 6
+	IF FLAG:(LOCAL + 1079) > 0 && CFLAG:(FLAG:(LOCAL + 1079)):気絶状態 <= ARG:2
+		LOCAL:21 += CFLAG:ARG:(LOCAL + 1270)
 	ENDIF
-	LOCAL:(LOCAL:0) = LOCAL:21
+	LOCAL:LOCAL = LOCAL:21
 NEXT
-FOR LOCAL:0, 1, 11
-	IF TFLAG:(LOCAL:0 + 1000) > 0 && CFLAG:(LOCAL:0):気絶状態 <= ARG:2
+FOR LOCAL, 1, 11
+	IF TFLAG:(LOCAL + 1000) > 0 && CFLAG:LOCAL:気絶状態 <= ARG:2
 		LOCAL:22 += 10
 	ENDIF
-	LOCAL:(LOCAL:0 + 10) = LOCAL:22
+	LOCAL:(LOCAL + 10) = LOCAL:22
 NEXT
 
 SELECTCASE ARG:1
@@ -55,18 +55,18 @@ SELECTCASE ARG:1
 		IF ARG:3 >= 1 && ARG:3 <= 10
 			;キャラ指定　気絶している場合等は後で対象不正によるランダム選択が入るので、考慮しない
 			RETURN (10 + ARG:3)
-		ELSEIF CFLAG:(ARG:0):行動時特定キャラ指定用
+		ELSEIF CFLAG:ARG:行動時特定キャラ指定用
 			;CFLAGに一時的目標指定が行われている場合、そのキャラを狙う
-			RETURN (10 + CFLAG:(ARG:0):行動時特定キャラ指定用)
+			RETURN (10 + CFLAG:ARG:行動時特定キャラ指定用)
 		ELSEIF ARG:3 == 11
 			;最も残りHPの割合が低いキャラの選択率アップ
 			LOCAL:23 = -1
 			LOCAL:24 = 1
-			FOR LOCAL:0, 1, 11
-				IF TFLAG:(LOCAL:0 + 1000) > 0 && CFLAG:(LOCAL:0):気絶状態 <= ARG:2
-					IF LOCAL:23 < 0 || LOCAL:23 > (1000 * BASE:(LOCAL:0):HP / MAXBASE:(LOCAL:0):HP)
-						LOCAL:23 = (1000 * BASE:(LOCAL:0):HP / MAXBASE:(LOCAL:0):HP)
-						LOCAL:24 = LOCAL:0
+			FOR LOCAL, 1, 11
+				IF TFLAG:(LOCAL + 1000) > 0 && CFLAG:LOCAL:気絶状態 <= ARG:2
+					IF LOCAL:23 < 0 || LOCAL:23 > (1000 * BASE:LOCAL:HP / MAXBASE:LOCAL:HP)
+						LOCAL:23 = (1000 * BASE:LOCAL:HP / MAXBASE:LOCAL:HP)
+						LOCAL:24 = LOCAL
 					ENDIF
 				ENDIF
 			NEXT
@@ -76,27 +76,27 @@ SELECTCASE ARG:1
 			;RETURN (10 + LOCAL:24)
 		ELSEIF ARG:3 == 13
 			;何らかの状態異常キャラが居ればそれの選択率アップ
-			FOR LOCAL:0, 1, 11
-				IF TFLAG:(LOCAL:0 + 1000) > 0 && CFLAG:(LOCAL:0):気絶状態 <= ARG:2
+			FOR LOCAL, 1, 11
+				IF TFLAG:(LOCAL + 1000) > 0 && CFLAG:LOCAL:気絶状態 <= ARG:2
 					FOR LOCAL:24, 50, 69
-						IF CFLAG:(LOCAL:0):(LOCAL:24 + 1000)
+						IF CFLAG:LOCAL:(LOCAL:24 + 1000)
 							;確率アップ
-							LOCAL:(10 + LOCAL:0) += 30
+							LOCAL:(10 + LOCAL) += 30
 							LOCAL:22 += 30
-							;RETURN (10 + LOCAL:0)
+							;RETURN (10 + LOCAL)
 						ENDIF
 					NEXT
 				ENDIF
 			NEXT
 		ELSEIF ARG:3 >= 50
 			;指定した状態異常キャラが居ればそれを選択
-			FOR LOCAL:0, 1, 11
-				IF TFLAG:(LOCAL:0 + 1000) > 0 && CFLAG:(LOCAL:0):気絶状態 <= ARG:2
-					IF CFLAG:(LOCAL:0):(ARG:3 + 1000)
+			FOR LOCAL, 1, 11
+				IF TFLAG:(LOCAL + 1000) > 0 && CFLAG:LOCAL:気絶状態 <= ARG:2
+					IF CFLAG:LOCAL:(ARG:3 + 1000)
 						;確率アップ
-						LOCAL:(10 + LOCAL:0) += 100
+						LOCAL:(10 + LOCAL) += 100
 						LOCAL:22 += 100
-						;RETURN (10 + LOCAL:0)
+						;RETURN (10 + LOCAL)
 					ENDIF
 				ENDIF
 			NEXT

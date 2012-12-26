@@ -110,7 +110,7 @@ SIF FLAG:ユニット状態 == 1
 LOCAL /= 10000
 RETURN LOCAL
 ;個人がお任せ時に出せるスコア
-@PERSONAL_キラメキ(ARG)
+@PERSONAL_アイドル力(ARG)
 #FUNCTION
 #LOCALSIZE 1
 LOCAL = 一億() * ((BASE:ARG:ベースボーカル + BASE:ARG:ベースビジュアル + BASE:ARG:ベースダンス) * 650 / 6 + SUM_団結値() * 35)
