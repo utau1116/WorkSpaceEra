@@ -2173,7 +2173,7 @@ IF SELECTCOM == 302
 		CASE 1
 			PRINTFORML 「お酒、ですか？」
 			;恋慕かつ料理技能level5以上
-			IF TALENT:85 == 1 && ABL:90 >= 5 && CFLAG:403 < 3
+			IF TALENT:85 == 1 && ABL:料理技能 >= 5 && CFLAG:403 < 3
 				PRINTFORML 「あ、ありがとうございます」
 				PRINTFORML （今度お料理に使ってみようかな？　それともお酌してあげようかな？）
 				PRINTFORMW （えへへ…%CSTR:12%よろこんでくれそう♪）

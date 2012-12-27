@@ -56,7 +56,7 @@ IF TFLAG:コマンド内容 == 1
 	EXP:PLAYER:指導経験 ++
 ELSEIF TFLAG:コマンド内容 == 2
 	;家事
-	SOURCE:19 = 500 + (ABL:0 * 100) + (ABL:90 * 100)
+	SOURCE:19 = 500 + (ABL:0 * 100) + (ABL:料理技能 * 100)
 	EXP:料理経験 ++
 ENDIF
 IF TFLAG:SELECTCOM分岐 == -1

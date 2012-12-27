@@ -90,6 +90,7 @@ NEXT
 F:1 = アクセサリー数
 
 CALL STATUS_RENEW(1)
+;画面表示
 CALL SHOP_MAIN_MENU
 CUSTOMDRAWLINE =
 IF FLAG:スケジュール決定
@@ -1591,9 +1592,9 @@ K = 0
 IF TARGET >= 0
 	SIF BASE:MASTER:HP > 300 && BASE:TARGET:0 > 200 && (ABL:0 >= 5 || CFLAG:2 >= 500 || TALENT:153)
 		I = 1
-	SIF BASE:MASTER:HP > 400 && BASE:TARGET:0 > 500 && ABL:90 >= 5 && (ABL:0 >= 10 || CFLAG:2 >= 1000 || TALENT:153)
+	SIF BASE:MASTER:HP > 400 && BASE:TARGET:0 > 500 && ABL:料理技能 >= 5 && (ABL:0 >= 10 || CFLAG:2 >= 1000 || TALENT:153)
 		J = 1
-	SIF ABL:6 >= 5 && ABL:90 >= 5 && (ABL:0 >= 10 || CFLAG:2 >= 1000 || TALENT:153)
+	SIF ABL:6 >= 5 && ABL:料理技能 >= 5 && (ABL:0 >= 10 || CFLAG:2 >= 1000 || TALENT:153)
 		K = 1
 ENDIF
 

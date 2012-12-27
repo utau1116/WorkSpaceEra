@@ -19,8 +19,8 @@ ENDIF
 CALL ISABLUP46
 
 PRINTFORM [0] -%PALAMNAME:106%の珠×{C}、
-;IF ABL:92 >= 2
-	PRINTFORM %EXPNAME:92%{B}
+;IF ABL:Ｖｏ技能 >= 2
+	PRINTFORM 被写経験{B}
 ;ENDIF
 PRINT 以上……
 IF I == 0
@@ -82,7 +82,7 @@ Z = 0
 ;被写の珠で上げる
 SIF JUEL:106 < C
 	I |= 1
-SIF EXP:92 < B
+SIF EXP:被写経験 < B
 	I |= 2
 IF I == 0
 	Z = 1
@@ -118,9 +118,9 @@ ELSEIF ABL:Ｖｉ技能 <= 3
 	A = 25
 	B = 25
 	C = 25
-	SIF EXP:92 >= EXPLV:3
+	SIF EXP:被写経験 >= EXPLV:3
 		A = 20
-	SIF EXP:92 >= EXPLV:3
+	SIF EXP:被写経験 >= EXPLV:3
 		C = 20
 	A = A * (ABL:Ｖｉ技能 - 1)
 	B = B * (ABL:Ｖｉ技能 - 1)
@@ -129,9 +129,9 @@ ELSEIF ABL:Ｖｉ技能 <= 5
 	A = 200
 	B = 40
 	C = 200
-	SIF EXP:92 >= EXPLV:4
+	SIF EXP:被写経験 >= EXPLV:4
 		A = 180
-	SIF EXP:92 >= EXPLV:4
+	SIF EXP:被写経験 >= EXPLV:4
 		C = 180
 	A = A * (ABL:Ｖｉ技能 - 3)
 	B = B * (ABL:Ｖｉ技能 - 3)
@@ -140,9 +140,9 @@ ELSEIF ABL:Ｖｉ技能 <= 8
 	A = 3000
 	B = 80
 	C = 3000
-	SIF EXP:92 >= EXPLV:5
+	SIF EXP:被写経験 >= EXPLV:5
 		A = 2500
-	SIF EXP:92 >= EXPLV:5
+	SIF EXP:被写経験 >= EXPLV:5
 		C = 2500
 	A = A * (ABL:Ｖｉ技能 - 5)
 	C = C * (ABL:Ｖｉ技能 - 5)
@@ -150,9 +150,9 @@ ELSEIF ABL:Ｖｉ技能 <= 11
 	A = 20000
 	B = 100
 	C = 20000
-	SIF EXP:92 >= EXPLV:5
+	SIF EXP:被写経験 >= EXPLV:5
 		A = 15000
-	SIF EXP:92 >= EXPLV:5
+	SIF EXP:被写経験 >= EXPLV:5
 		C = 15000
 	A = A + 8000 * (ABL:Ｖｉ技能 - 9)
 	C = C + 8000 * (ABL:Ｖｉ技能 - 9)

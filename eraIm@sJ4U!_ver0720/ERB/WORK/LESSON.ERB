@@ -103,14 +103,6 @@ SIF TFLAG:17 == 7
 ;ターゲットを一時隔離保存
 LOCAL:1 = TARGET
 
-;T = OURCE:5
-;N = OURCE:18
-;S = OURCE:20
-;J = OURCE:21
-;K = OURCE:19
-;V = OURCE:105
-;I = OURCE:106
-;D - OURCE:107
 FOR LOCAL, 1080, 1085
 	SIF FLAG:(LOCAL) <= 0
 		CONTINUE
@@ -137,33 +129,33 @@ IF TFLAG:17 == 0
 	I = 500
 	D = 500
 	;ABL:Vo技能をみる ここをＰランクや指導力に
-	IF ABL:105 == 0 || ABL:Ｖｉ技能 == 0 || ABL:Ｄａ技能 == 0
+	IF ABL:Ｖｏ技能 == 0 || ABL:Ｖｉ技能 == 0 || ABL:Ｄａ技能 == 0
 		T = 0
-	ELSEIF ABL:105 == 1 || ABL:Ｖｉ技能 == 1 || ABL:Ｄａ技能 == 1
+	ELSEIF ABL:Ｖｏ技能 == 1 || ABL:Ｖｉ技能 == 1 || ABL:Ｄａ技能 == 1
 		N += 10
 		T = 50
 		K += 10
 		V += 10
-	ELSEIF ABL:105 == 2 || ABL:Ｖｉ技能 == 2 || ABL:Ｄａ技能 == 2
+	ELSEIF ABL:Ｖｏ技能 == 2 || ABL:Ｖｉ技能 == 2 || ABL:Ｄａ技能 == 2
 		N += 30
 		T = 100
 		K += 30
 		V += 30
-	ELSEIF ABL:105 == 3 || ABL:Ｖｉ技能 == 3 || ABL:Ｄａ技能 == 3
+	ELSEIF ABL:Ｖｏ技能 == 3 || ABL:Ｖｉ技能 == 3 || ABL:Ｄａ技能 == 3
 		N += 50
 		T = 150
 		K += 50
 		V += 50
-	ELSEIF ABL:105 == 4 || ABL:Ｖｉ技能 == 4 || ABL:Ｄａ技能 == 4
+	ELSEIF ABL:Ｖｏ技能 == 4 || ABL:Ｖｉ技能 == 4 || ABL:Ｄａ技能 == 4
 		N += 80
 		T = 200
 		K += 80
 		V += 80
 	ELSE
-		N += (ABL:105 * 20)
-		T = (ABL:105 * 50)
-		K += (ABL:105 * 20)
-		V += (ABL:105 * 20)
+		N += (ABL:Ｖｏ技能 * 20)
+		T = (ABL:Ｖｏ技能 * 50)
+		K += (ABL:Ｖｏ技能 * 20)
+		V += (ABL:Ｖｏ技能 * 20)
 	ENDIF
 
 	;ABL:従順をみる
@@ -287,13 +279,13 @@ IF TFLAG:17 == 0
 		B /= 10000
 	ENDIF
 	
-	PRINTFORML %EXPNAME:93%+{B*3}
-	PRINTFORML %EXPNAME:92%+{B*3}
-	PRINTFORML %EXPNAME:103%+{B*3}
+	PRINTFORML 歌唱経験+{B*3}
+	PRINTFORML 被写経験+{B*3}
+	PRINTFORML 舞踊経験+{B*3}
 
-	EXP:93 += B * 3
-	EXP:92 += B * 3
-	EXP:103 += B * 3
+	EXP:歌唱経験 += B * 3
+	EXP:被写経験 += B * 3
+	EXP:舞踊経験 += B * 3
 	EXP:PLAYER:指導経験 += B * 3
 	
 	BASE:TARGET:VO倍率 += B * 3
@@ -307,9 +299,9 @@ IF TFLAG:17 == 0
 ELSEIF TFLAG:17 == 1
 	LOSEBASE:0 += 50
 	;VO経験で気力消費軽減
-	IF EXP:93 < 100
+	IF EXP:歌唱経験 < 100
 		LOSEBASE:1 += 100
-	ELSEIF EXP:93 < 500
+	ELSEIF EXP:歌唱経験 < 500
 		LOSEBASE:1 += 80
 	ELSE
 		LOSEBASE:1 += 50
@@ -320,33 +312,33 @@ ELSEIF TFLAG:17 == 1
 	K = 250
 	V = 500
 	;ABL:Vo技能をみる ここをＰランクや指導力に
-	IF ABL:105 == 0
+	IF ABL:Ｖｏ技能 == 0
 		T = 0
-	ELSEIF ABL:105 == 1
+	ELSEIF ABL:Ｖｏ技能 == 1
 		N += 10
 		T = 50
 		K += 10
 		V += 10
-	ELSEIF ABL:105 == 2
+	ELSEIF ABL:Ｖｏ技能 == 2
 		N += 30
 		T = 100
 		K += 30
 		V += 30
-	ELSEIF ABL:105 == 3
+	ELSEIF ABL:Ｖｏ技能 == 3
 		N += 50
 		T = 150
 		K += 50
 		V += 50
-	ELSEIF ABL:105 == 4
+	ELSEIF ABL:Ｖｏ技能 == 4
 		N += 80
 		T = 200
 		K += 80
 		V += 80
 	ELSE
-		N += (ABL:105 * 20)
-		T = (ABL:105 * 50)
-		K += (ABL:105 * 20)
-		V += (ABL:105 * 20)
+		N += (ABL:Ｖｏ技能 * 20)
+		T = (ABL:Ｖｏ技能 * 50)
+		K += (ABL:Ｖｏ技能 * 20)
+		V += (ABL:Ｖｏ技能 * 20)
 	ENDIF
 
 	;ABL:従順をみる
@@ -453,9 +445,9 @@ ELSEIF TFLAG:17 == 1
 		B /= 10000
 	ENDIF
 	
-	PRINTFORML %EXPNAME:93%+{B*3}
+	PRINTFORML 歌唱経験+{B*3}
 
-	EXP:93 += B * 3
+	EXP:歌唱経験 += B * 3
 	EXP:PLAYER:指導経験 += B * 3
 	BASE:TARGET:VO倍率 += B * 3
 
@@ -465,9 +457,9 @@ ELSEIF TFLAG:17 == 1
 ELSEIF TFLAG:17 == 2
 	LOSEBASE:0 += 50
 	;VO経験で気力消費軽減
-	IF EXP:92 < 100
+	IF EXP:被写経験 < 100
 		LOSEBASE:1 += 100
-	ELSEIF EXP:92 < 500
+	ELSEIF EXP:被写経験 < 500
 		LOSEBASE:1 += 80
 	ELSE
 		LOSEBASE:1 += 50
@@ -478,33 +470,33 @@ ELSEIF TFLAG:17 == 2
 	K = 250
 	I = 500
 	;ABL:Vo技能をみる ここをＰランクや指導力に
-	IF ABL:106 == 0
+	IF ABL:Ｖｉ技能 == 0
 		T = 0
-	ELSEIF ABL:106 == 1
+	ELSEIF ABL:Ｖｉ技能 == 1
 		N += 10
 		T = 50
 		K += 10
 		I += 10
-	ELSEIF ABL:106 == 2
+	ELSEIF ABL:Ｖｉ技能 == 2
 		N += 30
 		T = 100
 		K += 30
 		I += 30
-	ELSEIF ABL:106 == 3
+	ELSEIF ABL:Ｖｉ技能 == 3
 		N += 50
 		T = 150
 		K += 50
 		I += 50
-	ELSEIF ABL:106 == 4
+	ELSEIF ABL:Ｖｉ技能 == 4
 		N += 80
 		T = 200
 		K += 80
 		I += 80
 	ELSE
-		N += (ABL:106 * 20)
-		T = (ABL:106 * 50)
-		K += (ABL:106 * 20)
-		I += (ABL:106 * 20)
+		N += (ABL:Ｖｉ技能 * 20)
+		T = (ABL:Ｖｉ技能 * 50)
+		K += (ABL:Ｖｉ技能 * 20)
+		I += (ABL:Ｖｉ技能 * 20)
 	ENDIF
 
 	;ABL:従順をみる
@@ -611,11 +603,9 @@ ELSEIF TFLAG:17 == 2
 	ENDIF
 	
 	
-	PRINTFORML %EXPNAME:92%+{B*3}
-	;PRINTFORMW %EXPNAME:120%（%CALLNAME:PLAYER%）+{B}
-;	PRINTFORML %EXPNAME:101%+{B}
-;	;PRINTFORMW %EXPNAME:105%（%CALLNAME:PLAYER%）+{B}
-	EXP:92 += B * 3
+	PRINTFORML 被写経験+{B*3}
+
+	EXP:被写経験 += B * 3
 	EXP:PLAYER:指導経験 += B * 3
 	
 	BASE:TARGET:VI倍率 += B * 3
@@ -628,9 +618,9 @@ ELSEIF TFLAG:17 == 2
 ELSEIF TFLAG:17 == 3 
 	LOSEBASE:0 += 50
 	;Da経験で気力消費軽減
-	IF EXP:103 < 100
+	IF EXP:舞踊経験 < 100
 		LOSEBASE:1 += 100
-	ELSEIF EXP:103 < 500
+	ELSEIF EXP:舞踊経験 < 500
 		LOSEBASE:1 += 80
 	ELSE
 		LOSEBASE:1 += 50
@@ -641,33 +631,33 @@ ELSEIF TFLAG:17 == 3
 	K = 250
 	D = 500
 	;ABL:Vo技能をみる ここをＰランクや指導力に
-	IF ABL:107 == 0
+	IF ABL:Ｄａ技能 == 0
 		T = 0
-	ELSEIF ABL:107 == 1
+	ELSEIF ABL:Ｄａ技能 == 1
 		N += 10
 		T = 50
 		K += 10
 		D += 10
-	ELSEIF ABL:107 == 2
+	ELSEIF ABL:Ｄａ技能 == 2
 		N += 30
 		T = 100
 		K += 30
 		D += 30
-	ELSEIF ABL:107 == 3
+	ELSEIF ABL:Ｄａ技能 == 3
 		N += 50
 		T = 150
 		K += 50
 		D += 50
-	ELSEIF ABL:107 == 4
+	ELSEIF ABL:Ｄａ技能 == 4
 		N += 80
 		T = 200
 		K += 80
 		D += 80
 	ELSE
-		N += (ABL:107 * 20)
-		T = (ABL:107 * 50)
-		K += (ABL:107 * 20)
-		D += (ABL:107 * 20)
+		N += (ABL:Ｄａ技能 * 20)
+		T = (ABL:Ｄａ技能 * 50)
+		K += (ABL:Ｄａ技能 * 20)
+		D += (ABL:Ｄａ技能 * 20)
 	ENDIF
 
 	;ABL:従順をみる
@@ -774,11 +764,8 @@ ELSEIF TFLAG:17 == 3
 		B /= 10000
 	ENDIF
 	
-	PRINTFORML %EXPNAME:103%+{B*3}
-	;PRINTFORMW %EXPNAME:120%（%CALLNAME:PLAYER%）+{B}
-;	PRINTFORML %EXPNAME:101%+{B}
-;	;PRINTFORMW %EXPNAME:105%（%CALLNAME:PLAYER%）+{B}
-	EXP:103 += B * 3
+	PRINTFORML 舞踊経験+{B*3}
+	EXP:舞踊経験 += B * 3
 	EXP:PLAYER:指導経験 += B * 3
 
 	BASE:TARGET:DA倍率 += B * 3
@@ -790,9 +777,9 @@ ELSEIF TFLAG:17 == 3
 ELSEIF TFLAG:17 == 4 
 	LOSEBASE:0 += 100
 	;VO経験で気力消費軽減
-	IF EXP:93 < 100
+	IF EXP:歌唱経験 < 100
 		LOSEBASE:1 += 100
-	ELSEIF EXP:93 < 500
+	ELSEIF EXP:歌唱経験 < 500
 		LOSEBASE:1 += 80
 	ELSE
 		LOSEBASE:1 += 50
@@ -803,33 +790,33 @@ ELSEIF TFLAG:17 == 4
 	K = 500
 	V = 1200
 	;ABL:Vo技能をみる ここをＰランクや指導力に
-	IF ABL:105 == 0
+	IF ABL:Ｖｏ技能 == 0
 		T = 0
-	ELSEIF ABL:105 == 1
+	ELSEIF ABL:Ｖｏ技能 == 1
 		N += 30
 		T = 80
 		K += 50
 		V += 50
-	ELSEIF ABL:105 == 2
+	ELSEIF ABL:Ｖｏ技能 == 2
 		N += 50
 		T = 150
 		K += 80
 		V += 50
-	ELSEIF ABL:105 == 3
+	ELSEIF ABL:Ｖｏ技能 == 3
 		N += 200
 		T = 150
 		K += 50
 		V += 80
-	ELSEIF ABL:105 == 4
+	ELSEIF ABL:Ｖｏ技能 == 4
 		N += 250
 		T = 200
 		K += 80
 		V += 100
 	ELSE
-		N += (ABL:105 * 50)
-		T = (ABL:105 * 50)
-		K += (ABL:105 * 50)
-		V += (ABL:105 * 50)
+		N += (ABL:Ｖｏ技能 * 50)
+		T = (ABL:Ｖｏ技能 * 50)
+		K += (ABL:Ｖｏ技能 * 50)
+		V += (ABL:Ｖｏ技能 * 50)
 	ENDIF
 
 	;ABL:従順をみる
@@ -936,11 +923,8 @@ ELSEIF TFLAG:17 == 4
 	ENDIF
 	
 	
-	PRINTFORML %EXPNAME:93%+{B*3}
-	;PRINTFORMW %EXPNAME:120%（%CALLNAME:PLAYER%）+{B}
-;	PRINTFORML %EXPNAME:101%+{B}
-;	;PRINTFORMW %EXPNAME:105%（%CALLNAME:PLAYER%）+{B}
-	EXP:93 += B * 3
+	PRINTFORML 歌唱経験+{B*3}
+	EXP:歌唱経験 += B * 3
 	EXP:PLAYER:指導経験 += B * 3
 	BASE:TARGET:VO倍率 += B * 3
 
@@ -952,9 +936,9 @@ ELSEIF TFLAG:17 == 4
 ELSEIF TFLAG:17 == 5 
 	LOSEBASE:0 += 100
 	;VI経験で気力消費軽減
-	IF EXP:92 < 100
+	IF EXP:被写経験 < 100
 		LOSEBASE:1 += 100
-	ELSEIF EXP:92 < 500
+	ELSEIF EXP:被写経験 < 500
 		LOSEBASE:1 += 80
 	ELSE
 		LOSEBASE:1 += 50
@@ -965,33 +949,33 @@ ELSEIF TFLAG:17 == 5
 	K = 500
 	I = 1200
 	;ABL:Vo技能をみる ここをＰランクや指導力に
-	IF ABL:106 == 0
+	IF ABL:Ｖｉ技能 == 0
 		T = 0
-	ELSEIF ABL:106 == 1
+	ELSEIF ABL:Ｖｉ技能 == 1
 		N += 10
 		T = 50
 		K += 10
 		I += 30
-	ELSEIF ABL:106 == 2
+	ELSEIF ABL:Ｖｉ技能 == 2
 		N += 30
 		T = 100
 		K += 30
 		I += 90
-	ELSEIF ABL:106 == 3
+	ELSEIF ABL:Ｖｉ技能 == 3
 		N += 50
 		T = 150
 		K += 50
 		I += 150
-	ELSEIF ABL:106 == 4
+	ELSEIF ABL:Ｖｉ技能 == 4
 		N += 80
 		T = 200
 		K += 80
 		I += 240
 	ELSE
-		N += (ABL:106 * 20)
-		T = (ABL:106 * 50)
-		K += (ABL:106 * 20)
-		I += (ABL:106 * 50)
+		N += (ABL:Ｖｉ技能 * 20)
+		T = (ABL:Ｖｉ技能 * 50)
+		K += (ABL:Ｖｉ技能 * 20)
+		I += (ABL:Ｖｉ技能 * 50)
 	ENDIF
 
 	;ABL:従順をみる
@@ -1098,11 +1082,11 @@ ELSEIF TFLAG:17 == 5
 		B /= 10000
 	ENDIF
 	
-	PRINTFORML %EXPNAME:92%+{B*3}
+	PRINTFORML 被写経験+{B*3}
 	;PRINTFORMW %EXPNAME:120%（%CALLNAME:PLAYER%）+{B}
 ;	PRINTFORML %EXPNAME:101%+{B}
 ;	;PRINTFORMW %EXPNAME:105%（%CALLNAME:PLAYER%）+{B}
-	EXP:92 += B * 3
+	EXP:被写経験 += B * 3
 	EXP:PLAYER:指導経験 += B * 3
 
 
@@ -1115,9 +1099,9 @@ ELSEIF TFLAG:17 == 5
 ELSEIF TFLAG:17 == 6 
 	LOSEBASE:0 += 100
 	;Da経験で気力消費軽減
-	IF EXP:103 < 100
+	IF EXP:舞踊経験 < 100
 		LOSEBASE:1 += 100
-	ELSEIF EXP:103 < 500
+	ELSEIF EXP:舞踊経験 < 500
 		LOSEBASE:1 += 80
 	ELSE
 		LOSEBASE:1 += 50
@@ -1128,33 +1112,33 @@ ELSEIF TFLAG:17 == 6
 	K = 500
 	D = 1200
 	;ABL:Vo技能をみる ここをＰランクや指導力に
-	IF ABL:107 == 0
+	IF ABL:Ｄａ技能 == 0
 		T = 0
-	ELSEIF ABL:107 == 1
+	ELSEIF ABL:Ｄａ技能 == 1
 		N += 10
 		T = 50
 		K += 10
 		D += 30
-	ELSEIF ABL:107 == 2
+	ELSEIF ABL:Ｄａ技能 == 2
 		N += 30
 		T = 100
 		K += 30
 		D += 90
-	ELSEIF ABL:107 == 3
+	ELSEIF ABL:Ｄａ技能 == 3
 		N += 50
 		T = 150
 		K += 50
 		D += 150
-	ELSEIF ABL:107 == 4
+	ELSEIF ABL:Ｄａ技能 == 4
 		N += 80
 		T = 200
 		K += 80
 		D += 240
 	ELSE
-		N += (ABL:107 * 20)
-		T = (ABL:107 * 50)
-		K += (ABL:107 * 20)
-		D += (ABL:107 * 50)
+		N += (ABL:Ｄａ技能 * 20)
+		T = (ABL:Ｄａ技能 * 50)
+		K += (ABL:Ｄａ技能 * 20)
+		D += (ABL:Ｄａ技能 * 50)
 	ENDIF
 
 	;ABL:従順をみる
@@ -1261,11 +1245,11 @@ ELSEIF TFLAG:17 == 6
 		B /= 10000
 	ENDIF
 	
-	PRINTFORML %EXPNAME:103%+{B*3}
+	PRINTFORML 舞踊経験+{B*3}
 	;PRINTFORMW %EXPNAME:120%（%CALLNAME:PLAYER%）+{B}
 ;	PRINTFORML %EXPNAME:101%+{B}
 ;	;PRINTFORMW %EXPNAME:105%（%CALLNAME:PLAYER%）+{B}
-	EXP:103 += B * 3
+	EXP:舞踊経験 += B * 3
 	EXP:PLAYER:指導経験 += B * 3
 	BASE:TARGET:DA倍率 += B * 3
 	;主人公の指導技能レベルアップ
@@ -1276,9 +1260,9 @@ ELSEIF TFLAG:17 == 6
 ELSEIF TFLAG:17 == 7 
 	LOSEBASE:0 += 200
 	;レッスン経験で気力消費軽減
-	IF EXP:93 < 100 || EXP:被写経験 < 100 || EXP:舞踊経験 < 100
+	IF EXP:歌唱経験 < 100 || EXP:被写経験 < 100 || EXP:舞踊経験 < 100
 		LOSEBASE:1 += 100
-	ELSEIF EXP:93 < 500 || EXP:被写経験 < 500 || EXP:舞踊経験 < 500
+	ELSEIF EXP:歌唱経験 < 500 || EXP:被写経験 < 500 || EXP:舞踊経験 < 500
 		LOSEBASE:1 += 80
 	ELSE
 		LOSEBASE:1 += 50
@@ -1292,30 +1276,30 @@ ELSEIF TFLAG:17 == 7
 	I = 5000
 	D = 5000
 	;ABL:Vo技能をみる ここをＰランクや指導力に
-	IF ABL:105 == 0 || ABL:Ｖｉ技能 == 0 || ABL:Ｄａ技能 == 0
+	IF ABL:Ｖｏ技能 == 0 || ABL:Ｖｉ技能 == 0 || ABL:Ｄａ技能 == 0
 		T = 0
-	ELSEIF ABL:105 == 1 || ABL:Ｖｉ技能 == 1 || ABL:Ｄａ技能 == 1
+	ELSEIF ABL:Ｖｏ技能 == 1 || ABL:Ｖｉ技能 == 1 || ABL:Ｄａ技能 == 1
 		N += 10
 		T = 50
 		K += 10
 		V += 50
 		I += 50
 		D += 50
-	ELSEIF ABL:105 == 2 || ABL:Ｖｉ技能 == 2 || ABL:Ｄａ技能 == 2
+	ELSEIF ABL:Ｖｏ技能 == 2 || ABL:Ｖｉ技能 == 2 || ABL:Ｄａ技能 == 2
 		N += 30
 		T = 100
 		K += 30
 		V += 100
 		I += 100
 		D += 100
-	ELSEIF ABL:105 == 3 || ABL:Ｖｉ技能 == 3 || ABL:Ｄａ技能 == 3
+	ELSEIF ABL:Ｖｏ技能 == 3 || ABL:Ｖｉ技能 == 3 || ABL:Ｄａ技能 == 3
 		N += 50
 		T = 150
 		K += 50
 		V += 300
 		I += 300
 		D += 300
-	ELSEIF ABL:105 == 4 || ABL:Ｖｉ技能 == 4 || ABL:Ｄａ技能 == 4
+	ELSEIF ABL:Ｖｏ技能 == 4 || ABL:Ｖｉ技能 == 4 || ABL:Ｄａ技能 == 4
 		N += 80
 		T = 200
 		K += 80
@@ -1323,12 +1307,12 @@ ELSEIF TFLAG:17 == 7
 		I += 500
 		D += 500
 	ELSE
-		N += (ABL:105 * 20)
-		T = (ABL:105 * 20)
-		K += (ABL:105 * 20)
-		V += (ABL:105 * 100)
-		I += (ABL:106 * 100)
-		D += (ABL:107 * 100)
+		N += (ABL:Ｖｏ技能 * 20)
+		T = (ABL:Ｖｏ技能 * 20)
+		K += (ABL:Ｖｏ技能 * 20)
+		V += (ABL:Ｖｏ技能 * 100)
+		I += (ABL:Ｖｉ技能 * 100)
+		D += (ABL:Ｄａ技能 * 100)
 	ENDIF
 
 	;ABL:従順をみる
@@ -1441,15 +1425,12 @@ ELSEIF TFLAG:17 == 7
 		B /= 10000
 	ENDIF
 	
-	PRINTFORML %EXPNAME:93%+{B*3}
-	PRINTFORML %EXPNAME:92%+{B*3}
-	PRINTFORML %EXPNAME:103%+{B*3}
-	;PRINTFORMW %EXPNAME:120%（%CALLNAME:PLAYER%）+{B}
-;	PRINTFORML %EXPNAME:101%+{B}
-;	;PRINTFORMW %EXPNAME:105%（%CALLNAME:PLAYER%）+{B}
-	EXP:93 += B * 3
-	EXP:92 += B * 3
-	EXP:103 += B * 3
+	PRINTFORML 歌唱経験+{B*3}
+	PRINTFORML 被写経験+{B*3}
+	PRINTFORML 舞踊経験+{B*3}
+	EXP:歌唱経験 += B * 3
+	EXP:被写経験 += B * 3
+	EXP:舞踊経験 += B * 3
 	EXP:PLAYER:指導経験 += B * 3
 	BASE:TARGET:VO倍率 += B * 3
 	BASE:TARGET:VI倍率 += B * 3
@@ -1596,39 +1577,39 @@ A = V
 B = V
 
 ;ABL:歌唱素質をみる
-IF ABL:101 <= 70
+IF ABL:歌唱適正 <= 70
 	TIMES A , 0.30
 	TIMES B , 0.80
-ELSEIF ABL:101 <= 90
+ELSEIF ABL:歌唱適正 <= 90
 	TIMES A , 0.50
 	TIMES B , 0.90
-ELSEIF ABL:101 <= 110
+ELSEIF ABL:歌唱適正 <= 110
 	TIMES A , 0.70
 	TIMES B , 1.00
-ELSEIF ABL:101 <= 130
+ELSEIF ABL:歌唱適正 <= 130
 	TIMES A , 0.80
 	TIMES B , 1.10
-ELSEIF ABL:101 <= 150
+ELSEIF ABL:歌唱適正 <= 150
 	TIMES A , 0.90
 	TIMES B , 1.20
-ELSEIF ABL:101 > 150
+ELSEIF ABL:歌唱適正 > 150
 	IF A < 100000
-		A = A * (ABL:101 + 50) / 100
+		A = A * (ABL:歌唱適正 + 50) / 100
 	ELSEIF A < 100000000
-		A = A / 100 * (ABL:101 + 50)
+		A = A / 100 * (ABL:歌唱適正 + 50)
 	ENDIF
 	IF B < 100000
-		B = B * (ABL:101 + 100) / 100
+		B = B * (ABL:歌唱適正 + 100) / 100
 	ELSEIF B < 100000000
-		B = B / 100 * (ABL:101 + 100)
+		B = B / 100 * (ABL:歌唱適正 + 100)
 	ENDIF
 ENDIF
 
 ;ABL:歌唱技能を見る
 IF B < 100000
-	B = B * (ABL:105 * 10 + 100) / 100
+	B = B * (ABL:Ｖｏ技能 * 10 + 100) / 100
 ELSEIF B < 100000000
-	B = B / 100 * (ABL:105 * 10 + 100)
+	B = B / 100 * (ABL:Ｖｏ技能 * 10 + 100)
 ENDIF
 
 V= B
@@ -1640,39 +1621,39 @@ A = I
 B = I
 
 ;ABL:被写素質をみる
-IF ABL:102 <= 70
+IF ABL:被写適正 <= 70
 	TIMES A , 0.30
 	TIMES B , 0.80
-ELSEIF ABL:102 <= 90
+ELSEIF ABL:被写適正 <= 90
 	TIMES A , 0.50
 	TIMES B , 0.90
-ELSEIF ABL:102 <= 110
+ELSEIF ABL:被写適正 <= 110
 	TIMES A , 0.70
 	TIMES B , 1.00
-ELSEIF ABL:102 <= 130
+ELSEIF ABL:被写適正 <= 130
 	TIMES A , 0.80
 	TIMES B , 1.10
-ELSEIF ABL:102 <= 150
+ELSEIF ABL:被写適正 <= 150
 	TIMES A , 0.90
 	TIMES B , 1.20
-ELSEIF ABL:102 > 150
+ELSEIF ABL:被写適正 > 150
 	IF A < 100000
-		A = A * (ABL:102 + 50) / 100
+		A = A * (ABL:被写適正 + 50) / 100
 	ELSEIF A < 100000000
-		A = A / 100 * (ABL:102 + 50)
+		A = A / 100 * (ABL:被写適正 + 50)
 	ENDIF
 	IF B < 100000
-		B = B * (ABL:102 + 100) / 100
+		B = B * (ABL:被写適正 + 100) / 100
 	ELSEIF B < 100000000
-		B = B / 100 * (ABL:102 + 100)
+		B = B / 100 * (ABL:被写適正 + 100)
 	ENDIF
 ENDIF
 
 ;ABL:被写技能を見る
 IF B < 100000
-	B = B * (ABL:106 * 10 + 100) / 100
+	B = B * (ABL:Ｖｉ技能 * 10 + 100) / 100
 ELSEIF B < 100000000
-	B = B / 100 * (ABL:106 * 10 + 100)
+	B = B / 100 * (ABL:Ｖｉ技能 * 10 + 100)
 ENDIF
 
 I = B
@@ -1684,39 +1665,39 @@ A = D
 B = D
 
 ;ABL:舞踊素質をみる
-IF ABL:103 <= 70
+IF ABL:舞踊適正 <= 70
 	TIMES A , 0.30
 	TIMES B , 0.80
-ELSEIF ABL:103 <= 90
+ELSEIF ABL:舞踊適正 <= 90
 	TIMES A , 0.50
 	TIMES B , 0.90
-ELSEIF ABL:103 <= 110
+ELSEIF ABL:舞踊適正 <= 110
 	TIMES A , 0.70
 	TIMES B , 1.00
-ELSEIF ABL:103 <= 130
+ELSEIF ABL:舞踊適正 <= 130
 	TIMES A , 0.80
 	TIMES B , 1.10
-ELSEIF ABL:103 <= 150
+ELSEIF ABL:舞踊適正 <= 150
 	TIMES A , 0.90
 	TIMES B , 1.20
-ELSEIF ABL:103 > 150
+ELSEIF ABL:舞踊適正 > 150
 	IF A < 100000
-		A = A * (ABL:103 + 50) / 100
+		A = A * (ABL:舞踊適正 + 50) / 100
 	ELSEIF A < 100000000
-		A = A / 100 * (ABL:103 + 50)
+		A = A / 100 * (ABL:舞踊適正 + 50)
 	ENDIF
 	IF B < 100000
-		B = B * (ABL:103 + 100) / 100
+		B = B * (ABL:舞踊適正 + 100) / 100
 	ELSEIF B < 100000000
-		B = B / 100 * (ABL:103 + 100)
+		B = B / 100 * (ABL:舞踊適正 + 100)
 	ENDIF
 ENDIF
 
 ;ABL:舞踊技能を見る
 IF B < 100000
-	B = B * (ABL:107 * 10 + 100) / 100
+	B = B * (ABL:Ｄａ技能 * 10 + 100) / 100
 ELSEIF B < 100000000
-	B = B / 100 * (ABL:107 * 10 + 100)
+	B = B / 100 * (ABL:Ｄａ技能 * 10 + 100)
 ENDIF
 
 D = B

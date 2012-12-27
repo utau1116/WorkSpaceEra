@@ -28,15 +28,15 @@ IF ABL:7
 	ENDIF
 ENDIF
 ;ABL:歌唱技能
-IF ABL:92
-	IF ABL:92 <= 5
-		A += ABL:92 * 5
-	ELSEIF ABL:92 <= 10
-		A += 30 + ABL:92 / 3
-	ELSEIF ABL:92 <= 20
-		A += 40 + ABL:92 / 6
+IF ABL:Ｖｏ技能
+	IF ABL:Ｖｏ技能 <= 5
+		A += ABL:Ｖｏ技能 * 5
+	ELSEIF ABL:Ｖｏ技能 <= 10
+		A += 30 + ABL:Ｖｏ技能 / 3
+	ELSEIF ABL:Ｖｏ技能 <= 20
+		A += 40 + ABL:Ｖｏ技能 / 6
 	ELSE
-		A += 50 + ABL:92 / 9
+		A += 50 + ABL:Ｖｏ技能 / 9
 	ENDIF
 ENDIF
 ;MARK:快楽依存
@@ -159,19 +159,19 @@ ELSE
 	TIMES A, 3.00
 ENDIF
 ;ABL:歌唱技能をみる
-IF ABL:92 == 0
+IF ABL:Ｖｏ技能 == 0
 	C += 0
 	TIMES A , 0.80
-ELSEIF ABL:92 == 1
+ELSEIF ABL:Ｖｏ技能 == 1
 	C += 1
 	TIMES A , 1.00
-ELSEIF ABL:92 == 2
+ELSEIF ABL:Ｖｏ技能 == 2
 	C += 2
 	TIMES A , 1.30
-ELSEIF ABL:92 == 3
+ELSEIF ABL:Ｖｏ技能 == 3
 	C += 3
 	TIMES A , 1.60
-ELSEIF ABL:92 == 4
+ELSEIF ABL:Ｖｏ技能 == 4
 	C += 4
 	TIMES A , 2.00
 ELSE
@@ -249,8 +249,8 @@ SIF C > 60
 CALL TRAIN_MESSAGE_B
 
 IF C > 60
-	T = 1 + EXP:93
-	T = (ABL:92 * 90) + (ABL:92 * RAND:20) + (RAND:T * 10)
+	T = 1 + EXP:歌唱経験
+	T = (ABL:Ｖｏ技能 * 90) + (ABL:Ｖｏ技能 * RAND:20) + (RAND:T * 10)
 	;クリア前はリミットを加える
 	IF (FLAG:28 & 1) != 0
 		SIF T >= 20000
@@ -279,7 +279,7 @@ ELSE
 	ENDIF
 ENDIF
 PRINTFORML %EXPNAME:93%+{T}
-EXP:93 += T
+EXP:歌唱経験 += T
 
 RETURN 1
 
@@ -331,15 +331,15 @@ ELSE
 	TIMES A, 3.00
 ENDIF
 ;ABL:歌唱技能をみる
-IF ABL:92 == 0
+IF ABL:Ｖｏ技能 == 0
 	TIMES A , 0.80
-ELSEIF ABL:92 == 1
+ELSEIF ABL:Ｖｏ技能 == 1
 	TIMES A , 1.00
-ELSEIF ABL:92 == 2
+ELSEIF ABL:Ｖｏ技能 == 2
 	TIMES A , 1.30
-ELSEIF ABL:92 == 3
+ELSEIF ABL:Ｖｏ技能 == 3
 	TIMES A , 1.60
-ELSEIF ABL:92 == 4
+ELSEIF ABL:Ｖｏ技能 == 4
 	TIMES A , 2.00
 ELSE
 	TIMES A , 3.00
@@ -375,7 +375,7 @@ CALL TRAIN_MESSAGE_B
 
 T = 1 + RAND:2
 PRINTFORML %EXPNAME:93%+{T}
-EXP:93 += T
+EXP:歌唱経験 += T
 
 RETURN 1
 
@@ -396,11 +396,11 @@ IF TFLAG:18 == -1
 	PRINTFORML %CALLNAME:MASTER%は%CALLNAME:TARGET%を連れてその場を後にした……
 	WAIT
 ELSE
-	IF EXP:93 <= 50
+	IF EXP:歌唱経験 <= 50
 		PRINTFORML %CALLNAME:TARGET%は路上で軽く歌ってみた
-	ELSEIF EXP:93 <= 100
+	ELSEIF EXP:歌唱経験 <= 100
 		PRINTFORML %CALLNAME:TARGET%はストリートライブを開いた
-	ELSEIF EXP:93 <= 200
+	ELSEIF EXP:歌唱経験 <= 200
 		PRINTFORML %CALLNAME:TARGET%は足を止めた人々を前にして歌い始めた
 	ELSE
 		PRINTFORML %CALLNAME:TARGET%は待っていた人々に挨拶をしてから歌い始めた

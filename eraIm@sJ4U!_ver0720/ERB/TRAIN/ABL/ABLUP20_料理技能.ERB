@@ -20,7 +20,7 @@ CALL ISABLUP20
 
 PRINTFORM [0] - %PALAMNAME:16%の珠×{A}
 IF ABL:料理技能 >= 2
-	PRINTFORM 、%EXPNAME:90%{B}
+	PRINTFORM 、家事経験{B}
 ENDIF
 PRINT 以上……
 IF I == 0
@@ -35,7 +35,7 @@ PRINTL
 
 PRINTFORM [1] - %PALAMNAME:7%の珠×{C}
 IF ABL:料理技能 >= 2
-	PRINTFORM 、%EXPNAME:90%{B}
+	PRINTFORM 、家事経験{B}
 ENDIF
 PRINT 以上……
 IF J == 0
@@ -106,7 +106,7 @@ SIF JUEL:16 < A
 SIF JUEL:7 < C
 	J |= 1
 
-IF EXP:90 < B
+IF EXP:家事経験 < B
 	I |= 2
 	J |= 2
 ENDIF
@@ -139,7 +139,7 @@ ELSEIF ABL:料理技能 == 1
 	A = 50
 	B = 0
 	C = 500
-	IF EXP:90 >= EXPLV:3
+	IF EXP:家事経験 >= EXPLV:3
 		A = 20
 		C = 250
 	ENDIF
@@ -147,7 +147,7 @@ ELSEIF ABL:料理技能 == 2
 	A = 600
 	B = 25
 	C = 3000
-	IF EXP:90 >= EXPLV:4
+	IF EXP:家事経験 >= EXPLV:4
 		A = 300
 		C = 1500
 	ENDIF
@@ -155,7 +155,7 @@ ELSEIF ABL:料理技能 == 3
 	A = 5000
 	B = 50
 	C = 9000
-	IF EXP:90 >= EXPLV:5
+	IF EXP:家事経験 >= EXPLV:5
 		A = 2500
 		C = 4500
 	ENDIF
@@ -163,7 +163,7 @@ ELSEIF ABL:料理技能 == 4
 	A = 20000
 	B = 100
 	C = 24000
-	IF EXP:90 >= EXPLV:5
+	IF EXP:家事経験 >= EXPLV:5
 		A = 10000
 		C = 12000
 	ENDIF
@@ -182,7 +182,7 @@ ELSE
 		C = C * (ABL:料理技能 - 3) * (ABL:料理技能 - 3)
 	ENDIF
 	;倍の経験を持っているなら必要数軽減
-	IF EXP:90 >= B * 2
+	IF EXP:家事経験 >= B * 2
 		A = A / 2
 		C = C / 2
 	ENDIF

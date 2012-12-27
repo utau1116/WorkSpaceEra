@@ -19,7 +19,7 @@ ENDIF
 CALL ISABLUP45
 
 PRINTFORM [0] -%PALAMNAME:105%の珠×{C}、
-;IF ABL:92 >= 2
+;IF ABL:Ｖｏ技能 >= 2
 	PRINTFORM %EXPNAME:93%{B}
 ;ENDIF
 PRINT 以上……
@@ -82,7 +82,7 @@ Z = 0
 ;歌唱の珠で上げる
 SIF JUEL:105 < C
 	I |= 1
-SIF EXP:93 < B
+SIF EXP:歌唱経験 < B
 	I |= 2
 IF I == 0
 	Z = 1
@@ -118,9 +118,9 @@ ELSEIF ABL:Ｖｏ技能 <= 3
 	A = 25
 	B = 25
 	C = 25
-	SIF EXP:93 >= EXPLV:3
+	SIF EXP:歌唱経験 >= EXPLV:3
 		A = 20
-	SIF EXP:93 >= EXPLV:3
+	SIF EXP:歌唱経験 >= EXPLV:3
 		C = 20
 	A = A * (ABL:Ｖｏ技能 - 1)
 	B = B * (ABL:Ｖｏ技能 - 1)
@@ -129,9 +129,9 @@ ELSEIF ABL:Ｖｏ技能 <= 5
 	A = 200
 	B = 40
 	C = 200
-	SIF EXP:93 >= EXPLV:4
+	SIF EXP:歌唱経験 >= EXPLV:4
 		A = 180
-	SIF EXP:93 >= EXPLV:4
+	SIF EXP:歌唱経験 >= EXPLV:4
 		C = 180
 	A = A * (ABL:Ｖｏ技能 - 3)
 	B = B * (ABL:Ｖｏ技能 - 3)
@@ -140,9 +140,9 @@ ELSEIF ABL:Ｖｏ技能 <= 8
 	A = 3000
 	B = 80
 	C = 3000
-	SIF EXP:93 >= EXPLV:5
+	SIF EXP:歌唱経験 >= EXPLV:5
 		A = 2500
-	SIF EXP:93 >= EXPLV:5
+	SIF EXP:歌唱経験 >= EXPLV:5
 		C = 2500
 	A = A * (ABL:Ｖｏ技能 - 5)
 	C = C * (ABL:Ｖｏ技能 - 5)
@@ -150,9 +150,9 @@ ELSEIF ABL:Ｖｏ技能 <= 11
 	A = 20000
 	B = 100
 	C = 20000
-	SIF EXP:93 >= EXPLV:5
+	SIF EXP:歌唱経験 >= EXPLV:5
 		A = 15000
-	SIF EXP:93 >= EXPLV:5
+	SIF EXP:歌唱経験 >= EXPLV:5
 		C = 15000
 	A = A + 8000 * (ABL:Ｖｏ技能 - 9)
 	C = C + 8000 * (ABL:Ｖｏ技能 - 9)
