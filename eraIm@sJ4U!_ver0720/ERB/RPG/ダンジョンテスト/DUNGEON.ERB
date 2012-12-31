@@ -241,32 +241,33 @@ SELECTCASE DA:(FLAG:現X):(FLAG:現Y)
 	CASE -19
 	;	CALL FOUNTAIN_OF_TRISH
 	CASE -29
-	;	CALL DUNGEON_ELEVATOR
+		CALL DUNGEON_ELEVATOR
 	CASEELSE
 		CALLFORM EVENT_ENTER_DUNGEON_{FLAG:現ダンジョン},ARG
 ENDSELECT
+
 SIF RESULT || FLAG:エンカウントしない || FLAG:脱出
 	LOCAL = 1
 
 ;遭遇チェック
 IF LOCAL == 0
-;	IF FLAG:エンカウント変動 == 1
-;		FLAG:エンカウント変動2 = FLAG:エンカウント率
-;		FLAG:エンカウント率 = (FLAG:エンカウント変動2)/2
-;	ELSEIF FLAG:エンカウント変動 == 2
-;		FLAG:エンカウント変動2 = FLAG:エンカウント率
-;		FLAG:エンカウント率 = (FLAG:エンカウント変動2)*2
-;	ENDIF
+	IF FLAG:エンカウント変動 == 1
+		FLAG:エンカウント変動2 = FLAG:エンカウント率
+		FLAG:エンカウント率 = (FLAG:エンカウント変動2)/2
+	ELSEIF FLAG:エンカウント変動 == 2
+		FLAG:エンカウント変動2 = FLAG:エンカウント率
+		FLAG:エンカウント率 = (FLAG:エンカウント変動2)*2
+	ENDIF
 	LOCAL:3 = FLAG:エンカウント率補正 + 100
 	;SIF EQUIP:MASTER:エネミーホイホイ && NUM_SUMMONER()
 	;	LOCAL:3 *= 2
 	;SIF EQUIP:MASTER:エネミーバイバイ && NUM_SUMMONER()
 	;	LOCAL:3 /= 2
 	$ENCOUNT_START
-	;SIF RAND:100 <= LOCAL:3
-	;	CALLFORM CHECK_ENCOUNT_{FLAG:現ダンジョン}
-	;IF RESULT == 1
-	;	LOCAL:1 = 1
+	SIF RAND:100 <= LOCAL:3
+		CALLFORM CHECK_ENCOUNT_{FLAG:現ダンジョン}
+	IF RESULT == 1
+		LOCAL:1 = 1
 ;---- EDIT 004 MOD START -------------------------
 ;		IF FLAG:エストマ
 		;IF FLAG:エストマ || ( EQUIP:MASTER:キャプス・ロック && NUM_SUMMONER() )
@@ -312,19 +313,19 @@ IF LOCAL == 0
 		;	PRINTW 悪魔と遭遇した！
 		;	CALL BATTLE_START
 		;ENDIF
-	;ENDIF
+	ENDIF
 	LOCAL:3 -= 100
 	SIF LOCAL:3 > 0
 		GOTO ENCOUNT_START
-;	SIF FLAG:エンカウント変動 == 1 && RESULT != 1
-;		FLAG:エンカウント率 = FLAG:エンカウント変動2
-;	SIF FLAG:エンカウント変動 == 2 && RESULT != 1
-;		FLAG:エンカウント率 = FLAG:エンカウント変動2
-;	IF RESULT == 1
-;		PRINTW 悪魔と遭遇した！
-;		FLAG:未遭遇歩数 = 0
-;		CALL BATTLE_START
-;	ENDIF
+	SIF FLAG:エンカウント変動 == 1 && RESULT != 1
+		FLAG:エンカウント率 = FLAG:エンカウント変動2
+	SIF FLAG:エンカウント変動 == 2 && RESULT != 1
+		FLAG:エンカウント率 = FLAG:エンカウント変動2
+	IF RESULT == 1
+		PRINTW ライバルと遭遇した！
+		FLAG:未遭遇歩数 = 0
+		CALL BATTLE_START,0,0,0
+	ENDIF
 ENDIF
 ;CALL MOVE_MOON
 CALL AUTOMAP
@@ -1414,16 +1415,110 @@ SIF ARG:2 == 0
 	CALLFORM EVENT_ENTER_DUNGEON_{FLAG:現ダンジョン},0
 	RETURN 1
 
-;===================================================================
-;ID捜査
-;===================================================================
-;@SEARCH_ID(ARG)
-;#FUNCTION
-;FOR LOCAL,0,FLAG:最大X
-;	FOR LOCAL:1,0,FLAG:最大Y
-;		IF DA:(LOCAL):(LOCAL:1) == ARG
-;			RETURNF LOCAL*100+LOCAL:1
-;		ENDIF
+;---- EDIT 016 ADD START -------------------------
+;=====================================================================
+;汎用敵配置処理
+;	#ダンジョン毎に定義が必要な関数(実際動かしてるところはエコービルなどをみてください)
+;		@CLASS_NUM_X 			敵の出てくる種族数。1~3くらいを推奨す
+;		@CLASS_NUM_COMMON,ARG	敵の種類数の基本的な数値を返す
+;		@ENEMY_NUM_X,ARG		敵の総数。種族数も送るので1~10の間で設定を
+;						 	 	なお、1~10の間に自動的に丸めるので設定段階では10超えてもいいです
+;		@ENEMY_NUM_COMMON,ARG	敵の総数の基本的な数値を返す
+;		@ENEMY_X				敵の内容、RESULTが敵のキャラ番号、RESULT:1が敵のLVとなります
+;		@ENEMYSET_X				上記のセット版、RESULT:偶数、RESULT:奇数が番号/LVとなります。組み合わせを固定で組みたい場合はこちら
+;		@SET_ENEMY_STATUS_X		敵ステータスの特別変化。ダンジョン毎に能力をある程度変える場合はここでどうぞ
+;=====================================================================
+@ENEMY_TABLE
+#DIM CLASS_NUM, 1
+#DIM ENEMY_NUM, 1
+#DIM MAXENEMY, 1
+#DIM MINENEMY, 1
+#DIM ENEMY, 10
+#DIM ENEMYLV, 10
+VARSET RESULT
+VARSET ENEMY, -1
+;-------------D&T風初期化--------------------
+VARSET LOCAL
+VARSET TFLAG
+;関連フラグ全初期化
+FOR LOCAL, 1, 11
+	VARSET CFLAG:LOCAL:0, 0
+	VARSET ABL:LOCAL:0, 0
+	VARSET TALENT:LOCAL:0, 0
+	VARSET BASE:LOCAL:0, 0
+	VARSET CALLNAME:LOCAL
+	CFLAG:LOCAL:パートナー選択可 = -1
+NEXT
+;-------------------------------------------
+
+;最初に種族数を取得
+TRYCCALLFORM CLASS_NUM_{FLAG:現ダンジョン}
+	CLASS_NUM = RESULT
+CATCH
+	;一応、定義ファイルがない場合、デフォルトの数値を代入
+	SELECTCASE RAND:100
+		CASE IS < 40
+			CLASS_NUM = 1
+		CASE IS < 80
+			CLASS_NUM = 2
+		CASEELSE
+			CLASS_NUM = 3
+	ENDSELECT
+ENDCATCH
+;敵の総数を取得
+TRYCCALLFORM ENEMY_NUM_{FLAG:現ダンジョン}, CLASS_NUM
+	ENEMY_NUM = LIMIT(RESULT, CLASS_NUM, 10)
+CATCH
+	ENEMY_NUM = LIMIT(RESULT, CLASS_NUM*2, CLASS_NUM*4)
+ENDCATCH
+LOCAL = 0
+;組み合わせ配置なら、それに
+;TRYCCALLFORM CALLFORM ENEMYSET_{FLAG:現ダンジョン}, CLASS_NUM
+;	FOR LOCAL, 0, CLASS_NUM+1
+;		ENEMY:LOCAL = RESULT:(LOCAL*2)
+;		ENEMYLV:LOCAL = RESULT:(LOCAL*2+1)
 ;	NEXT
+;CATCH
+	;組み合わせがランダムならこっち
+	WHILE LOCAL < CLASS_NUM
+		CALLFORM ENEMY_{FLAG:現ダンジョン}, CLASS_NUM
+		;同一の敵が来ないようにする
+		SIF MATCH(ENEMY, RESULT)
+			CONTINUE
+		ENEMY:LOCAL = RESULT
+		ENEMYLV:LOCAL = RESULT:1
+		LOCAL ++
+	WEND
+;ENDCATCH
+LOCAL = 0
+;LOCAL:1~10に1~10を入れる
+FOR LOCAL, 1, 11
+	LOCAL:LOCAL = LOCAL
+NEXT
+;LOCAL:1~10をシャッフル
+FOR LOCAL, 1, 11
+	SWAP LOCAL:LOCAL, LOCAL:RAND(1, 10)
+NEXT
+
+;実際の配置
+FOR LOCAL, 1, ENEMY_NUM+1
+	LOCAL:11 = LOCAL:LOCAL
+	;SIF POS(LOCAL:11) >= 0
+	;	CONTINUE
+	LOCAL:12 = LOCAL-1 < CLASS_NUM ? LOCAL-1 # RAND:CLASS_NUM
+	CALL SET_ENEMY_STATUS, ENEMY:(LOCAL:12) , ENEMYLV:(LOCAL:12), LOCAL:11
+	;CALL SET_ENEMY, LOCAL:11, ENEMY:(LOCAL:12), ENEMYLV:(LOCAL:12)
+	;ここでステータス変化させる場合の関数を呼ぶ
+	;TRYCALLFORM SET_ENEMY_STATUS_{FLAG:現ダンジョン}, CHARANUM - 1
+NEXT
+
+;実際の配置
+;FOR LOCAL, 0, ENEMY_NUM
+;	LOCAL:1 = LOCAL:(LOCAL + 7)
+;	SIF POS(LOCAL:1) >= 0
+;		CONTINUE
+;	LOCAL:2 = LOCAL < CLASS_NUM ? LOCAL # RAND:CLASS_NUM
+;	CALL SET_ENEMY, LOCAL:1, ENEMY:(LOCAL:2), ENEMYLV:(LOCAL:2)
+;	;ここでステータス変化させる場合の関数を呼ぶ
+;	TRYCALLFORM SET_ENEMY_STATUS_{FLAG:現ダンジョン}, CHARANUM - 1
 ;NEXT
-;RETURNF LOCAL*100+LOCAL:1

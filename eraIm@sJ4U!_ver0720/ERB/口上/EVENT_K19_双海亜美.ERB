@@ -19,12 +19,9 @@
 ;------------------------------------------------
 ; -CreatorMessage-
 ;
-;恋愛を通して少しずつ大人の階段上るよ兄（ｃ）！
-;原作よりやけに乙女だよ兄（ｃ）！
-;キャラ崩壊には注意してね兄（ｃ）！
-;
-;大人びて見せたいけど、結局は子供の亜美
-;そんな亜美が恋愛を通して、ちょっとずつ大人に近づいていく感じを出したいです
+;亜美はおしゃまな子
+;適応力が高くて、エロいことにもすぐ慣れるけど、どうしてもイタズラを入れちゃう
+;Ｐにイタズラ→逆襲で誘い受け
 ;
 ;						書いた人　eraIm@sJの人
 ;-------------------------------------------------
@@ -182,8 +179,7 @@ IF TFLAG:600 == 3
 		CFLAG:222 = 3
 	;デート経験有り
 	ELSEIF EXP:94 > 0 && (CFLAG:222 < 2 || FLAG:7 == 2)
-		PRINTFORMW 「兄ちゃん、亜美がかわいいのは分かるけどね」
-		PRINTFORMW 「だからって、軽い気持ちで告白なんてしちゃだめだよ？」
+		PRINTFORMW 
 		CFLAG:222 = 2
 	;それ以外
 	ELSEIF CFLAG:222 < 1 || FLAG:7 == 2
@@ -510,7 +506,7 @@ IF TFLAG:600 == 23
 		CFLAG:246 = 4
 	;デート経験有り
 	ELSEIF EXP:94 > 0 && (CFLAG:246 < 5 || FLAG:7 == 2)
-		PRINTFORMW 
+		PRINTFORMW 「むぅ……%CALLNAME:T%より亜美といた方がいいのに」
 		CFLAG:246 = 3
 	;それ以外
 	ELSEIF CFLAG:246 < 5 || FLAG:7 == 2
@@ -1203,11 +1199,7 @@ IF SELECTCOM == 301
 			CFLAG:402 = 5
 		;キス経験有り
 		ELSEIF EXP:96 > 0 && (CFLAG:402 < 4 || FLAG:7 == 2)
-			PRINTFORMW 「亜美のモノマネコーナー、その765！」
-			PRINTFORMW お題はねずみでお願いしますっ！
-			PRINTFORMW 「ちゅーｗｗｗちゅーｗｗｗちゅっｗｗちゅっｗｗ」
-			PRINTFORMW なかなか上手いじゃないか、褒美にジュースを奢ってやろう
-			PRINTFORMW 「えっへっへー　亜美はジュースより、兄ちゃんのちゅーがいいな」
+			PRINTFORMW 
 			CFLAG:402 = 4
 		;デート経験有り
 		ELSEIF EXP:94 > 0 && (CFLAG:402 < 3 || FLAG:7 == 2)
@@ -1388,11 +1380,30 @@ IF SELECTCOM == 305
 	ELSE
 		;恋慕
 		IF TALENT:85 == 1 && (CFLAG:409 < 6 || FLAG:7 == 2)
-			PRINTFORMW 
+			;夜
+			IF TIME:12
+				PRINTFORMW 亜美と晩御飯を作った後、テレビを見ながらご相伴に預かった
+				PRINTFORMW 「あ！兄ちゃん、亜美達がテレビに映ってるよ」
+				PRINTFORMW 大はしゃぎをする亜美に、ちゃんと録画してあるから、後でまた見ようと言った
+				PRINTFORMW ………
+				PRINTFORMW 食事が終わると、あなたは食べ終えた食器をシンクに運ぶため席をはずした
+				PRINTFORMW 「えへへ……亜美達がテレビに出られるのも……兄ちゃんが来てくれたおかげだね……」
+				PRINTFORMW 「ありがとう……兄ちゃん……」
+				PRINTFORMW あなたに聞こえないように、亜美は小さくお礼を口にした
+			ELSE
+				PRINTFORMW こ……これは……！
+				PRINTFORMW 黒地のレースのパンティ……しかもスケスケ……いったい誰がこんなけしからんものを……！
+				PRINTFORMW 「兄ちゃぁん……なんで勝手に亜美のクローゼットあさってるの……？」
+				PRINTFORMW あ……亜美…これは違うんだ！プロデューサーたるもの、アイドルの下着の好み位把握を……
+				PRINTFORMW 「問答無用！！」
+				PRINTFORMW ギャーーーーーッ！！
+				PRINTFORMW 断末魔の悲鳴を上げて、あなたの意識はarcadiaへ旅立ってしまった……
+				PRINTFORMW 「まったく……兄ちゃんのために買ったパンツなんだから……見るならエッチの時にして欲しかったよ……」
+			ENDIF
 			CFLAG:409 = 6
 		;恋人
 		ELSEIF TALENT:153 == 1 && (CFLAG:409 < 5 || FLAG:7 == 2)
-			PRINTFORMW 
+
 			CFLAG:409 = 5
 		;キス経験有り
 		ELSEIF EXP:96 > 0 && (CFLAG:409 < 4 || FLAG:7 == 2)
@@ -1418,7 +1429,7 @@ IF SELECTCOM == 305
 ENDIF
 
 ;-------------------------------------------------
-;料亭で食事 CFLAG404
+;外食する CFLAG404
 ;-------------------------------------------------
 IF SELECTCOM == 320
 	;初めて
@@ -1433,7 +1444,10 @@ IF SELECTCOM == 320
 			CFLAG:404 = 6
 		;恋人
 		ELSEIF TALENT:153 == 1 && (CFLAG:404 < 5 || FLAG:7 == 2)
-			PRINTFORMW 「んっふっふ～、兄ちゃん、お酌しましょうか？」
+			PRINTFORMW 「兄ちゃんのその硬くて太いのちょうだい……？」
+			PRINTFORMW 「ん♪おいしい……ねぇ…もっと……」
+			PRINTFORMW 「あっ♪白くてねばねばのが絡みついて、口の中が幸せだよぉ……」
+			PRINTFORMW とろろうどんを食べているだけなのに、とても卑猥に聞こえるのはなぜだろう？
 			CFLAG:404 = 5
 		;キス経験有り
 		ELSEIF EXP:96 > 0 && (CFLAG:404 < 4 || FLAG:7 == 2)
@@ -1445,7 +1459,7 @@ IF SELECTCOM == 320
 			CFLAG:404 = 3
 		;それ以外
 		ELSEIF CFLAG:404 < 2 || FLAG:7 == 2
-			PRINTFORMW 「兄ちゃん、亜美もお酒飲みたいよ…」
+			PRINTFORMW 「」
 			CFLAG:404 = 2
 		ENDIF
 	ENDIF
@@ -1579,7 +1593,7 @@ IF SELECTCOM == 340
 		;恋人
 		ELSEIF TALENT:153 == 1 && (CFLAG:410 < 3 || FLAG:7 == 2)
 			PRINTFORMW 「んっ……んっ……」
-			PRINTFORMW 「兄ちゃんとだけだよ？こんなことしてるのは……」
+			PRINTFORMW 「他の子と……こんなことしちゃ嫌だかんね……？」
 			CFLAG:410 = 3
 		;それ以外
 		ELSEIF CFLAG:410 < 2 || FLAG:7 == 2
@@ -1676,7 +1690,7 @@ IF SELECTCOM == 360
 			CFLAG:413 = 3
 		;それ以外
 		ELSEIF CFLAG:413 < 2 || FLAG:7 == 2
-			PRINTFORMW 
+			PRINTFORMW 布ごしに亜美の胸を愛撫すると、亜美は小さく体を震わせた……
 			CFLAG:413 = 2
 		ENDIF
 	ENDIF
@@ -1688,7 +1702,10 @@ ENDIF
 IF SELECTCOM == 361
 	;初めて
 	IF CFLAG:414 == 0
-		PRINTFORMW 
+		PRINTFORMW 人目のない路地裏へ亜美を連れ込むと、亜美の下着の中へ手を滑り込ませた…
+		PRINTFORMW 「あんっ…んふふ……兄ちゃんも大胆だねぇ……」
+		PRINTFORMW 「こんなとこ誰かに見られたら……亜美達……ん……芸能界にいられなくなるよ？」
+		PRINTFORMW そう言いつつも、亜美もそのスリルを楽しんでいるようだった
 		CFLAG:414 = 1
 	;二回目以降
 	ELSE
@@ -1698,7 +1715,8 @@ IF SELECTCOM == 361
 			CFLAG:414 = 6
 		;恋人
 		ELSEIF TALENT:153 == 1 && (CFLAG:414 < 5 || FLAG:7 == 2)
-			PRINTFORMW 
+			PRINTFORMW 「んっ……兄ちゃんの手……太くて大きくて……」
+			PRINTFORMW 「一人でするのと……全然違うよぉ……」
 			CFLAG:414 = 5
 		;キス経験有り
 		ELSEIF EXP:96 > 0 && (CFLAG:414 < 4 || FLAG:7 == 2)
@@ -1878,7 +1896,11 @@ IF SELECTCOM == 3 && TEQUIP:18 == 0 && TEQUIP:53 == 0
 			PRINTFORMW 亜美はぎこちない手つきで、自慰に耽っている……
 			PRINTFORMW 「にいちゃぁん……亜美、亜美切ないよぉ……はぁんっ…ぅん」
 		ELSE
-			PRINTFORMW 
+			PRINTFORMW 「亜美のおなにーが見たいって……それじゃエッチしてる意味がなくない？」
+			PRINTFORMW 「えー？それはそれ、これはこれ……？」
+			PRINTFORMW 「もぅ…しょうがないなぁ……あ…あんまりまじまじと見ないでね…」
+			PRINTFORMW 亜美はおずおずと足を開き、指先で自分のクリトリスをこすり始めた……
+			PRINTFORMW （んっ……！？兄ちゃんに見られて……一人でするより気持ちいい……）
 		ENDIF
 			CFLAG:419 = 1
 	;二回目以降
@@ -1959,7 +1981,8 @@ IF SELECTCOM == 5
 			CFLAG:421 = 4
 		;合意or恋人
 		ELSEIF (TALENT:152 == 1 || TALENT:153 == 1) && (CFLAG:421 < 3 || FLAG:7 == 2)
-			PRINTFORMW 
+			PRINTFORMW 「んぅぅ……はぁ…はぁ……んっ……」
+			PRINTFORMW 「先っぽは…ん…弱いから……だめ……っ」
 			CFLAG:421 = 3
 		;それ以外
 		ELSEIF CFLAG:421 < 2 || FLAG:7 == 2
@@ -2111,22 +2134,15 @@ IF SELECTCOM == 84
 	IF CFLAG:425 == 0
 		;処女(処女喪失処理が既に終了しているので、V経験1の場合)
 		IF EXP:0 == 1
-			;合意
-			IF TALENT:152 == 1
-				PRINTFORMW 
+			PRINTFORMW 「――――――っっ！？」
+			IF NOWEX:1
+				PRINTFORMW 初めて受ける強烈な快楽に声にならない矯正をあげ、亜美は絶頂した……
 			ELSE
-				PRINTFORMW 
+				PRINTFORMW 「に…にいちゃん…んん……！なにこれ……気持ちよすぎて…怖いよぉ……」
+				PRINTFORMW 亜美はより快楽を貪ろうと、いっそう激しく腰を動かし始めた……
 			ENDIF
-		;非処女
-		ELSE
-			;合意
-			IF TALENT:152 == 1
-				PRINTFORMW 
-			ELSE
-				PRINTFORMW 
-			ENDIF
-		ENDIF
 			CFLAG:425 = 1
+		ENDIF
 	;二回目以降
 	ELSE
 		;恋慕+V感覚Lv5以上
@@ -2161,7 +2177,9 @@ IF SELECTCOM == 10
 			PRINTFORMW 「あ、ああ……亜美のあそこに当てるんだ……」
 			PRINTFORMW 「ひゃんんっ！あぁんっっ！」
 		ELSE
-			PRINTFORMW 
+			PRINTFORMW 「わぁ……なにこれ？新しいおもちゃ…？」
+			PRINTFORMW 「あ…震えだしたよ……マッサージしてくれる……」
+			PRINTFORMW 「ひゃわんんっ！そ……そこに当てるんだね……」
 		ENDIF
 			CFLAG:426 = 1
 	;二回目以降
@@ -2195,22 +2213,13 @@ IF SELECTCOM == 11 && TEQUIP:11
 	IF CFLAG:427 == 0
 		;処女(処女喪失処理が既に終了しているので、V経験1の場合)
 		IF EXP:0 == 1
-			;合意
-			IF TALENT:152 == 1
-				PRINTFORMW 
-			ELSE
-				PRINTFORMW 
-			ENDIF
-		;非処女
-		ELSE
-			;合意
-			IF TALENT:152 == 1
-				PRINTFORMW 
-			ELSE
-				PRINTFORMW 
-			ENDIF
+			PRINTFORMW 「無理だよぉ…！そんなおっきいの入るわけないじゃん！」
+			PRINTFORMW あなたは亜美の訴えを無視し、亜美の身体をベッドの上に押し倒すと、秘裂にバイブをあてがった……
+			PRINTFORMW 「うわあん！兄ちゃんのいじめっこ――っ！ひゃうぅぅんっ！」
+			PRINTFORMW ウウィ――ンといやらしくうねり、バイブは亜美の膣内へと侵入していった……
+			
 		ENDIF
-			CFLAG:427 = 1
+		CFLAG:427 = 1
 	;二回目以降
 	ELSE
 		;恋慕+V感覚Lv5以上
@@ -2252,7 +2261,8 @@ IF SELECTCOM == 11 && TEQUIP:11 == 0
 		CFLAG:428 = 3
 	;それ以外
 	ELSEIF CFLAG:428 < 2 || FLAG:7 == 2
-		PRINTFORMW 
+		PRINTFORMW 「んぅ……っ！」
+		PRINTFORMW バイブを抜いてやると、亜美は体から異物が抜き取られる感覚に、小さく体を震わせた……
 		CFLAG:428 = 2
 	ENDIF
 ENDIF
@@ -2426,7 +2436,7 @@ IF SELECTCOM == 18 && TEQUIP:18
 		CFLAG:434 = 3
 	;それ以外
 	ELSEIF CFLAG:434 < 2 || FLAG:7 == 2
-		PRINTFORMW 
+		PRINTFORMW 「んふふ……洗いっこでもする？」
 		CFLAG:434 = 2
 	ENDIF
 ENDIF

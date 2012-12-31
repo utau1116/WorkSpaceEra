@@ -1,86 +1,87 @@
-;ARG	助手可能なキャラがいるか？
-@SHOP_MAIN_MENU
+@UNITSTATUS
 VARSET LOCAL
 CUSTOMDRAWLINE =
-
-;残り日数取得
-CALL SYSTEM_GET_LIMITDAY
-;年月日、曜日、天気等取得
-CALL YOUBI
 ;ユニットステータス表示
-
 	;一行目
-PRINTL ＵＮＩＴ
-
-STR = 
-	;二行目
-;VO
-;レベルによってユニット名色替え
-SELECTCASE ユニットレベル()
-	;白
-	CASE 0 TO 2
-		CALL SET_COLOR("雪歩")
-	;黄緑
-	CASE 3 TO 4
-		CALL SET_COLOR("美希")
-	;緑
-	CASE 5 TO 6
-		CALL SET_COLOR("律子")
-	;水色
-	CASE 7 TO 8
-		CALL SET_COLOR("響")
-	;青
-	CASE 9 TO 10
-		CALL SET_COLOR("千早")
-	;桃
-	CASE 11 TO 12
-		CALL SET_COLOR("伊織")
-	;黄
-	CASE 13 TO 14
-		CALL SET_COLOR("亜美")
-	;橙
-	CASE 15 TO 16
-		CALL SET_COLOR("やよい")
-	;赤
-	CASE 17 TO 18
-		CALL SET_COLOR("春香")
-	;紫
-	CASE 19 TO 20
-		CALL SET_COLOR("あずさ")
-	CASEELSE
-		CALL SET_COLOR("デフォルト")
-ENDSELECT
-PRINTFORM Lv
-PRINTFORM {ユニットレベル(),3,LEFT}
-PRINTFORM %CSTR:0:22,20,LEFT%
-RESETCOLOR
-PRINTFORM （ユニット状態：%PRINT_ユニット状態()%）
-CALL お任せ時スコア
-LOCALS = (イメージ：%ADD_COMMA(RESULT)%)
-PRINTFORM %LOCALS%
-PRINTFORM （団結力：%ADD_COMMA(SUM_団結値())%）
-IF FLAG:記者
-	PRINTFORM  記者　：%記者名(), 24, LEFT%
-ELSE
-	PRINTFORM  記者　：%SAVESTR:199, 24, LEFT%
-ENDIF
-PRINTL 
-
-	;三行目
-LOCAL = SUM_ファン数()
-PRINTFORM ファン数：
-LOCALS = %ADD_COMMA(LOCAL)%人
-PRINTFORM %LOCALS%
-PRINTL 
-
-	;四行目;VO
+;PRINTFORML [201]画面変更
 ;DRAWLINE
-FOR LOCAL:0, 1080, 1085
-	IF FLAG:(LOCAL:0) > 0
-		LOCAL:1 += BASE:(FLAG:(LOCAL:0)):ベースボーカル
-		LOCAL:2 += BASE:(FLAG:(LOCAL:0)):ベースビジュアル
-		LOCAL:3 += BASE:(FLAG:(LOCAL:0)):ベースダンス
-		LOCAL:4 += 1
+IF FLAG:ショップ画面管理
+	SKIPDISP 1
+ELSE
+	SKIPDISP 0
+ENDIF
+	PRINTL ＵＮＩＴ
+	STR = 
+	;二行目
+	;VO
+	;レベルによってユニット名色替え
+	SELECTCASE ユニットレベル()
+		;白
+		CASE 0 TO 2
+			CALL SET_COLOR("雪歩")
+		;黄緑
+		CASE 3 TO 4
+			CALL SET_COLOR("美希")
+		;緑
+		CASE 5 TO 6
+			CALL SET_COLOR("律子")
+		;水色
+		CASE 7 TO 8
+			CALL SET_COLOR("響")
+		;青
+		CASE 9 TO 10
+			CALL SET_COLOR("千早")
+		;桃
+		CASE 11 TO 12
+			CALL SET_COLOR("伊織")
+		;黄
+		CASE 13 TO 14
+			CALL SET_COLOR("亜美")
+		;橙
+		CASE 15 TO 16
+			CALL SET_COLOR("やよい")
+		;赤
+		CASE 17 TO 18
+			CALL SET_COLOR("春香")
+		;紫
+		CASE 19 TO 20
+			CALL SET_COLOR("あずさ")
+		CASEELSE
+			CALL SET_COLOR("デフォルト")
+	ENDSELECT
+	PRINTFORM Lv
+	PRINTFORM {ユニットレベル(),3,LEFT}
+	PRINTFORM %CSTR:0:22,20,LEFT%
+	RESETCOLOR
+	PRINTFORM （ユニット状態：%PRINT_ユニット状態()%）
+	PRINTFORM （団結力：%ADD_COMMA(SUM_団結値())%）
+	IF FLAG:記者
+		PRINTFORM （記者：%記者名()%）
+	ELSE
+		PRINTFORM （記者：%SAVESTR:199%）
+	ENDIF
+	PRINTL 
+	
+	CALL お任せ時スコア
+	LOCALS = イメージ：%ADD_COMMA(RESULT)%
+	PRINTFORM %LOCALS%
+	PRINTL 
+	;三行目
+	LOCAL = SUM_ファン数()
+	PRINTFORM ファン数：
+	LOCALS = %ADD_COMMA(LOCAL)%人
+	PRINTFORM %LOCALS%
+	PRINTL 
+	
+	[SKIPSTART]
+	;四行目;VO
+	;DRAWLINE
+	FOR LOCAL:0, 1080, 1085
+		IF FLAG:(LOCAL:0) > 0
+			LOCAL:1 += BASE:(FLAG:(LOCAL:0)):ベースボーカル
+			LOCAL:2 += BASE:(FLAG:(LOCAL:0)):ベースビジュアル
+			LOCAL:3 += BASE:(FLAG:(LOCAL:0)):ベースダンス
+			LOCAL:4 += 1
 	ENDIF
 NEXT
 ;0除算にならないように
@@ -101,6 +102,7 @@ PRINTL
 PRINTFORM DA（{LOCAL:3, 4, LEFT}）
 CALL NEWPRINT_VOVIDABAR(999, 83, 999)
 PRINTL
+[SKIPEND]
 
 	;七行目
 ;ユニット表記
@@ -150,8 +152,8 @@ DRAWLINE
 	PRINTL 
 	ALIGNMENT LEFT
 DRAWLINE
-
-
+SKIPDISP 0
+@SHOP_MAINMENU
 ;スケジュールはスケジュール選択後に、スケジュール入力欄に表示
 PRINTFORM {DAY:3}年 %STR:2%月 {DAY:1}日 (%STR:1%) 天気:%STR:3% {DAY+1}日目(%STR:4%)  
 PRINTFORML %STR:5%
@@ -245,7 +247,7 @@ ENDIF
 PRINT   
 SIF ASSI <= 0
 	SETCOLOR (COLOR("light-gray"))
-PRINTBUTTON @"%"[131]変更", 11, LEFT%", 131
+PRINTBUTTON @"%"[108]変更", 11, LEFT%", 108
 RESETCOLOR
 PRINTL 
 IF ASSI > 0

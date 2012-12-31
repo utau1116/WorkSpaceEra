@@ -8,20 +8,21 @@ IF ARG:0 == 0
 ENDIF
 
 ;アイテム欄が一杯なら無視
-IF FLAG:所持アイテム数 >= FLAG:最大所持可能アイテム数
-	RETURN
-ENDIF
+;IF FLAG:所持アイテム数 >= FLAG:最大所持可能アイテム数
+;	RETURN
+;ENDIF
 
 ;アイテム追加
 IF ARG:0 >= 100	
-	FLAG:(FLAG:所持アイテム数 + 1100) = ARG:0
-	FLAG:所持アイテム数 += 1
-	;PRINTFORML アイテムID{ARG}
-	PRINTFORMW %UNCERTAIN_ITEM_NAME(ARG)% を手に入れた！
+	;FLAG:(FLAG:所持アイテム数 + 1100) = ARG:0
+	;FLAG:所持アイテム数 += 1
+	;PRINTFORMW %UNCERTAIN_ITEM_NAME(ARG)% を手に入れた！
+	CALL SE("ダンジョン","宝箱","アイテムゲット")
+	PRINTFORMW %ITEMNAME:ARG%を手に入れた
+	CALL GET_ITEM,ARG
 ELSE
 	PRINTFORMW エラー!不明なアイテムID{ARG:0}が指定されました
 ENDIF
-
 ;
 ;不確定時のアイテム名
 ;ARG アイテム番号
