@@ -80,7 +80,7 @@ SELECTCASE RESULT
 								CONTINUE
 							PRINTFORML [{LOCAL}]%HAIROPTION(1)%
 						CASE 126
-							SIF HAIROPTION(1) == "Å|Å|Å|"
+							SIF HAIROPTION(1,,1) == "Å|Å|Å|"
 								CONTINUE
 							SIF !STRLENS(@"%HAIROPTION(1,,1)%")
 								CONTINUE

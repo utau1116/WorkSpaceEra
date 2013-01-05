@@ -682,9 +682,9 @@ RETURN 1
 @GET_STUFF
 ;Tで指定されたキャラ番号のキャラの、戦闘素質をSに入れて返す。こっそりS:1に浪費癖、S:2に主導権基準値も入れる。→eraM@sではS3,S4,S5がVoViDa
 
-S:0 = ABL:T:歌唱適正
-S:1 = ABL:T:被写適正
-S:2 = ABL:T:舞踊適正
+S:0 = ABL:T:歌唱適性
+S:1 = ABL:T:被写適性
+S:2 = ABL:T:舞踊適性
 S:3 = ABL:T:97
 S:4 = CFLAG:T:12
 ;レベル0＝未設定はレベル50扱い
@@ -1886,9 +1886,9 @@ NEXT
 ;TSフラグ
 CFLAG:ARG:41 = 0
 ;各種適正をフラグに置き換え
-BASE:ARG:VO倍率 = ABL:ARG:歌唱適正
-BASE:ARG:VI倍率 = ABL:ARG:被写適正
-BASE:ARG:DA倍率 = ABL:ARG:舞踊適正
+BASE:ARG:VO倍率 = ABL:ARG:歌唱適性
+BASE:ARG:VI倍率 = ABL:ARG:被写適性
+BASE:ARG:DA倍率 = ABL:ARG:舞踊適性
 ;各種データを設定
 MAXBASE:ARG:団結値 = 499
 BASE:ARG:団結値 = 25

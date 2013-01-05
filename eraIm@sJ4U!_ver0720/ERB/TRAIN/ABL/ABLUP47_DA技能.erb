@@ -19,7 +19,7 @@ ENDIF
 CALL ISABLUP47
 
 PRINTFORM [0] -%PALAMNAME:107%の珠×{C}、
-;IF ABL:舞踊適正 >= 2
+;IF ABL:舞踊適性 >= 2
 	PRINTFORM %EXPNAME:103%{B}
 ;ENDIF
 PRINT 以上……
@@ -224,14 +224,14 @@ ENDIF
 
 
 ;踊り上手
-IF ABL:舞踊適正 >= 120
+IF ABL:舞踊適性 >= 120
 	TIMES A , 0.90
 	TIMES B , 0.90
 	TIMES C , 0.90
 ENDIF
 
 ;踊り苦手
-IF ABL:舞踊適正 <= 90
+IF ABL:舞踊適性 <= 90
 	TIMES A , 1.20
 	TIMES B , 1.20
 	TIMES C , 1.20

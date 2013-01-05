@@ -433,8 +433,8 @@ FOR LOCAL,0,CHARANUM
 	;関係ない人は省く
 	SIF LOCAL != MASTER && LOCAL != TARGET && LOCAL != ASSI
 		CONTINUE
-	SIF TCVAR:LOCAL:表示カット
-		CONTINUE
+	;SIF TCVAR:LOCAL:表示カット
+	;	CONTINUE
 	CALL SOURCE_ABLUP(LOCAL)
 NEXT
 ;-------------------------------------------------
