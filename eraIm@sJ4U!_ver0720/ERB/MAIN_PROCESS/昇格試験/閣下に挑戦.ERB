@@ -36,6 +36,7 @@ LOCAL:2 = (FLAG:現在フロア * 2 % 5) / 2
 LOCAL:3 = FLAG:現在フロア * 2 / 5
 ;ボス戦開始
 CALL BGM("戦闘", "閣下に挑戦")
+CALL SET_ENEMY_STATUS(21100,0,3,0)
 CALL BATTLE_START(FLAG:ボスID保存場所, LOCAL:2, (FLAG:敵レベル + LOCAL:3))
 IF RESULT == 0
 CALL MMSTOP

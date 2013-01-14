@@ -67,8 +67,8 @@ ENDIF
 ;特殊ソース処理
 ;-------------------------------------------------
 ;抑圧、抵抗持ちには、抑鬱ソース追加
-;SIF TALENT:抑圧 || TALENT:抵抗
-;	SOURCE:反感 += 400
+SIF TALENT:抑圧 || TALENT:抵抗
+	SOURCE:反感 += 400
 ;-------------------------------------------------
 ;汚れの処理
 ;-------------------------------------------------
@@ -100,11 +100,11 @@ ELSE
 	EXP:自慰経験 += 1
 	EXP:調教自慰経験 += 1
 ENDIF
+
 ;公開オナニー時は異常経験付加
-;IF TEQUIP:ビデオ撮影 && !GETBIT(CFLAG:3,0)
+SIF TEQUIP:ビデオ撮影
 	EXP:異常経験 ++
-;	SETBIT CFLAG:3,0
-;ENDIF
+
 ;同性愛　レズなら戻り値1ゲイなら戻り値2
 IF HETEROSEX(TARGET,PLAYER)
 	EXP:(39 + HETEROSEX(TARGET,PLAYER)) += 4

@@ -73,10 +73,7 @@ ENDIF
 EXP:Ａ経験 += 24
 
 ;Ａ拡張経験
-;IF !EXP:Ｖ拡張経験 && !EXP:Ａ拡張経験 && !GETBIT(CFLAG:3,5)
-	EXP:異常経験 += 1
-;	SETBIT CFLAG:3,5
-;ENDIF
+EXP:異常経験 += 1
 
 EXP:Ａ拡張経験 += 5
 ;同性愛　レズなら戻り値1ゲイなら戻り値2

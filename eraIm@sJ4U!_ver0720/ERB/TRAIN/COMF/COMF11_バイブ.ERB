@@ -29,8 +29,8 @@ SOURCE:反感 = 40
 ;特殊ソース処理
 ;-------------------------------------------------
 ;抑圧、抵抗持ちには、抑鬱ソース追加
-;SIF TALENT:抑圧 || TALENT:抵抗
-;	SOURCE:反感 += 40
+SIF TALENT:抑圧 || TALENT:抵抗
+	SOURCE:反感 += 40
 
 ;処女だった場合は、苦痛のソースと反発のソースを追加する
 IF TALENT:処女 == 1
@@ -54,10 +54,8 @@ CALL PAIN_CHECK_V(TARGET)
 EXP:Ｖ経験 ++
 
 ;異常経験
-;IF TALENT:処女 == 1 && !GETBIT(CFLAG:3,3)
+SIF TALENT:処女 == 1
 	EXP:異常経験 ++
-	;SETBIT CFLAG:3,3
-;ENDIF
 
 ;同性愛　レズなら戻り値1ゲイなら戻り値2
 IF HETEROSEX(TARGET,PLAYER)

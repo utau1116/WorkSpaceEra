@@ -23,7 +23,7 @@ TCVAR:PLAYER:2 = 1
 TCVAR:PLAYER:4 = 2000
 
 ;奉仕快楽フラグ
-TFLAG:30 = 1
+TFLAG:奉仕快楽 = 1
 ;V経験を伴うコマンドのフラグ(処女膜再生対応)
 SIF TALENT:85 && ASSIPLAY == 0 && EXP:0 == 0
 	TFLAG:20 = 1
@@ -53,8 +53,8 @@ SOURCE:不潔 = Y*10 + 60
 ;特殊ソース処理
 ;-------------------------------------------------
 ;抑圧、抵抗持ちには、抑鬱ソース追加
-;SIF TALENT:抑圧 || TALENT:抵抗
-;	SOURCE:反感 += 800
+SIF TALENT:抑圧 || TALENT:抵抗
+	SOURCE:反感 += 800
 
 ;貞操観念持ちで恋慕、親愛持ち以外には常に反発のソースを追加する（セックス系のみ）
 SIF TALENT:貞操観念 && !TALENT:恋慕
@@ -95,13 +95,11 @@ STAIN:膣内 |= STAIN:PLAYER:Ｐ
 ;EXP:Ｖ性交経験 ++
 
 ;異常経験
-IF TALENT:処女 && ASSIPLAY && (TALENT:PLAYER:オトコ)
+IF TALENT:処女 && ASSIPLAY && TALENT:PLAYER:オトコ
 	EXP:異常経験 += 3
 ELSEIF TALENT:処女
 	EXP:異常経験 += 2
 ENDIF
-;SIF TALENT:処女 && !GETBIT(CFLAG:3,1)
-;	SETBIT CFLAG:3,1
 
 ;同性愛　レズなら戻り値1ゲイなら戻り値2
 IF HETEROSEX(TARGET,PLAYER)

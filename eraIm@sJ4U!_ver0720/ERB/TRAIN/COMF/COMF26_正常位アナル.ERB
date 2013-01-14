@@ -52,8 +52,8 @@ SOURCE:不潔 = Y*10 + 60
 ;特殊ソース処理
 ;-------------------------------------------------
 ;抑圧、抵抗持ちには、抑鬱ソース追加
-;SIF TALENT:抑圧 || TALENT:抵抗
-;	SOURCE:反感 += 500
+SIF TALENT:抑圧 || TALENT:抵抗
+	SOURCE:反感 += 500
 
 ;Aへの苦痛は先に処理しておく
 CALL PAIN_CHECK_A(TARGET)

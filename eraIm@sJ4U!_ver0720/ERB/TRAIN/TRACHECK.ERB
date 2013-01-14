@@ -709,7 +709,7 @@ ELSE
 	LOCAL *= 5
 ENDIF
 
-IF TFLAG:奉仕快楽フラグ
+IF TFLAG:奉仕快楽
 	IF LOCAL >= 12000
 		LOCAL:1 = 16
 		TIMES CUP:ARG:恐怖 , 0.65
@@ -868,13 +868,13 @@ ENDIF
 SIF ARG == MASTER
 	RETURN 0
 A = CUP:ARG:反感+CUP:ARG:不快
-IF A >= 500 && A < 1000 && TFLAG:前回のASSIPLAYの履歴 == 0
+IF A >= 500 && A < 1000 && TFLAG:前回のASSIPLAYの履歴 == 0 && MARK:ARG:4 <= 0
 	MARK:ARG:反発感情 = 1
 	SIF MARK:ARG:4 < 1
 		MARK:ARG:4 = 1
 	TFLAG:反発感情 = 1
 	
-ELSEIF A >= 1000 && A < 2000 && TFLAG:前回のASSIPLAYの履歴 == 0
+ELSEIF A >= 1000 && A < 2000 && TFLAG:前回のASSIPLAYの履歴 == 0 && MARK:ARG:4 <= 1
 	MARK:ARG:反発感情 = 2
 	TFLAG:反発感情 = 2
 	IF MARK:ARG:4 < 2
@@ -887,7 +887,8 @@ ELSEIF A >= 1000 && A < 2000 && TFLAG:前回のASSIPLAYの履歴 == 0
 			TFLAG:刻印取得時の親密の変化 = 2
 		ENDIF
 	ENDIF
-ELSEIF A >= 2000 && TFLAG:前回のASSIPLAYの履歴 == 0
+	MARK:ARG:4 = 2
+ELSEIF A >= 2000 && TFLAG:前回のASSIPLAYの履歴 == 0 && MARK:ARG:4 <= 2
 	MARK:ARG:反発感情 = 3
 	TFLAG:反発感情 = 3
 	IF MARK:ARG:4 < 3
@@ -900,6 +901,7 @@ ELSEIF A >= 2000 && TFLAG:前回のASSIPLAYの履歴 == 0
 			TFLAG:刻印取得時の親密の変化 = 2
 		ENDIF
 	ENDIF
+	MARK:ARG:4 = 3
 ENDIF
 ;恋慕有+その他の条件を満たして友好的に処女を奪ったフラグ
 ;1の時は反発感情を取得しない。この段階で初期化する

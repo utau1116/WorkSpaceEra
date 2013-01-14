@@ -9,8 +9,7 @@
 VARSET LOCAL
 SIF SOURCE:ARG:快Ｃ
 	EXP:ARG:Ｃ経験 ++
-SIF SOURCE:ARG:快Ｖ
-; && (!TALENT:ARG:処女 || !TFLAG:破瓜抑制)
+SIF SOURCE:ARG:快Ｖ && (!TALENT:ARG:処女 || !TFLAG:破瓜抑制)
 	EXP:ARG:Ｖ経験 ++
 SIF SOURCE:ARG:快Ａ
 	EXP:ARG:Ａ経験 ++
@@ -18,11 +17,6 @@ SIF SOURCE:ARG:快Ｂ
 	EXP:ARG:Ｂ経験 ++
 SIF SOURCE:ARG:快Ｍ
 	EXP:ARG:Ｍ経験 ++
-;SIF CFLAG:ARG:ローター挿入 && EXP_UP(1,ARG) > 0
-;	EXP:ARG:1 --
-;SIF CFLAG:ARG:ローターA挿入 && EXP_UP(2,ARG) > 0
-;	EXP:ARG:2 --
-
 
 ;FileName_SOURCE1.ERB ------------------------------ Rev1.00
 ;快Ｃのソース処理

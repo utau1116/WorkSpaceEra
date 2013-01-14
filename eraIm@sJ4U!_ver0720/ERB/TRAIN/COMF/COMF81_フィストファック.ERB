@@ -71,10 +71,8 @@ ENDIF
 ;Ｖ経験
 EXP:Ｖ経験 += 24
 ;Ｖ拡張経験
-IF !EXP:Ｖ拡張経験 && !EXP:Ａ拡張経験 && !GETBIT(CFLAG:4 ,5)
-	EXP:異常経験 ++
-	SETBIT CFLAG:4,5
-ENDIF
+;IF !EXP:Ｖ拡張経験 && !EXP:Ａ拡張経験
+EXP:異常経験 ++
 
 EXP:Ｖ拡張経験 += 5
 

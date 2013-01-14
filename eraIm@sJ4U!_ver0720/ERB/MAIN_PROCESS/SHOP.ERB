@@ -951,8 +951,7 @@ ENDIF
 PRINTFORML (残り%ADD_COMMA(MONEY)%Ｇ)
 DRAWLINE
 DRAWLINE
-
-PRINTL 誰と別れますか？
+PRINTL 誰を解雇しますか？
 PRINTL 
 ;別れられるキャラを記録する変数初期化
 REPEAT CHARANUM
@@ -1015,7 +1014,7 @@ IF X == 1 && U == 0
 ELSEIF X == 1 && U == 1
 	PRINTFORML [200] 休憩中のキャラを非表示にする
 ENDIF
-PRINTFORML [300] 別れられるキャラ全員と別れる
+PRINTFORML [300] 解雇できるキャラ全員を解雇する
 
 $INPUT_LOOP_CHARA_SALE
 INPUT
@@ -1031,11 +1030,11 @@ ELSEIF RESULT == 200 && X == 1
 		RESTART
 	ENDIF
 ELSEIF RESULT == 300
-	PRINTFORML 別れられるキャラ全員と別れます。よろしいですか？
+	PRINTFORML 解雇できるキャラ全員を解雇します。よろしいですか？
 	PRINTFORML ※現在のパートナー、初期パートナー、ユニットメンバー、[相愛]キャラとは別れられません。
 	PRINTFORML 
-	PRINTFORML [0] はい（再開時に能力を引き継ぎます。仲間を勧誘するからの再勧誘が可能です）
-	PRINTFORML [1] はい（再開時に能力を引き継ぎません。仲間を勧誘するからの再勧誘が不可能です）
+	PRINTFORML [0] はい（再開時に能力を引き継ぎます）
+	PRINTFORML [1] はい（再開時に能力を引き継ぎません）
 	PRINTFORML [2] いいえ
 	
 	$INPUT_LOOP_CHARA_SALE_ALL
@@ -1059,27 +1058,62 @@ ELSEIF RESULT == 300
 		;助手の場合助手なしに
 		SIF COUNT == ASSI
 			ASSI = -1
+		;別れ状態にする
+		CFLAG:COUNT:勧誘状況 = 3
+		;待機中動作をリセット
+		CFLAG:COUNT:13 = 0
+		
+		;装備をはずす
+		IF EQUIP:COUNT:装着中服ID > 0
+			ITEM:(EQUIP:COUNT:装着中服ID) ++
+			EQUIP:COUNT:装着中服ID = 0
+		ENDIF
+		IF EQUIP:COUNT:HEAD > 0
+			ITEM:(EQUIP:COUNT:HEAD) ++
+			EQUIP:COUNT:HEAD = 0
+		ENDIF
+		IF EQUIP:COUNT:BODY > 0
+			ITEM:(EQUIP:COUNT:BODY) ++
+			EQUIP:COUNT:BODY = 0
+		ENDIF
+		IF EQUIP:COUNT:HAND > 0
+			ITEM:(EQUIP:COUNT:HAND) ++
+			EQUIP:COUNT:HAND = 0
+		ENDIF
+		IF EQUIP:COUNT:LEG > 0
+			ITEM:(EQUIP:COUNT:LEG) ++
+			EQUIP:COUNT:LEG = 0
+		ENDIF
 		
 		IF RESULT == 0
 			;一時的に別れる（CFLAG:21立てるだけ）
 			CFLAG:COUNT:21 = 1
-			;別れ状態にする
-			CFLAG:COUNT:勧誘状況 = 3
-			;待機中動作をリセット
-			CFLAG:COUNT:13 = 0
-			;装備をはずす
-			SIF EQUIP:COUNT:装着中服ID > 0
-				DITEMTYPE:(EQUIP:COUNT:装着中服ID - 1500):0 = -1
 		ELSE
 			;完全に別れる（キャラデータリセット）
-			;別れ状態にする
-			CFLAG:COUNT:勧誘状況 = 3
-			;待機中動作をリセット
-			CFLAG:COUNT:13 = 0
-			;装備をはずす
-			SIF EQUIP:COUNT:装着中服ID > 0
-				DITEMTYPE:(EQUIP:COUNT:装着中服ID - 1500):0 = -1
-			;LOCAL:1 += 1
+			FOR TEMP, 0, VARSIZE("BASE")
+				MAXBASE:COUNT:TEMP = CSVBASE(COUNT, TEMP)
+			NEXT
+			FOR TEMP, 0, VARSIZE("ABL")
+				ABL:COUNT:TEMP = CSVABL(COUNT, TEMP)
+			NEXT
+			FOR TEMP, 0, VARSIZE("TALENT")
+				TALENT:COUNT:TEMP = CSVTALENT(COUNT, TEMP)
+			NEXT
+			FOR TEMP, 0, VARSIZE("MARK")
+				MARK:COUNT:TEMP = CSVMARK(COUNT, TEMP)
+			NEXT
+			FOR TEMP, 0, VARSIZE("EXP")
+				EXP:COUNT:TEMP = CSVEXP(COUNT, TEMP)
+			NEXT
+			FOR TEMP, 0, VARSIZE("JUEL")
+				JUEL:COUNT:TEMP = CSVJUEL(COUNT, TEMP)
+			NEXT
+			FOR TEMP, 0, VARSIZE("EQUIP")
+				EQUIP:COUNT:TEMP = CSVEQUIP(COUNT, TEMP)
+			NEXT
+			FOR TEMP, 0, VARSIZE("CFLAG")
+				CFLAG:COUNT:TEMP = CSVCFLAG(COUNT, TEMP)
+			NEXT
 		ENDIF
 	REND
 	PRINTFORMW 別れられるキャラ全員と別れました
@@ -1129,37 +1163,70 @@ ELSE
 	TARGET = RESULT
 	TFLAG:600 = 24
 	CALL KOJO_MESSAGE_SEND("JUN")
-	
 	;別れる拒否パッチより、別れる口上内でCFLAG:7に1を代入していた場合別れるを拒否
 	IF CFLAG:7 == 1
 		CFLAG:7 = 0
 		RESTART
 	ENDIF
-	
 	PRINTFORMW %CALLNAME:TARGET%と別れました
+	;COUNTにTARGETを格納
+	COUNT = TARGET
+	;別れ状態にする
+	CFLAG:勧誘状況 = 3
+	;待機中動作をリセット
+	CFLAG:13 = 0
+	;装備をはずす
+	IF EQUIP:COUNT:装着中服ID > 0
+		ITEM:(EQUIP:COUNT:装着中服ID) ++
+		EQUIP:COUNT:装着中服ID = 0
+	ENDIF
+	IF EQUIP:COUNT:HEAD > 0
+		ITEM:(EQUIP:COUNT:HEAD) ++
+		EQUIP:COUNT:HEAD = 0
+	ENDIF
+	IF EQUIP:COUNT:BODY > 0
+		ITEM:(EQUIP:COUNT:BODY) ++
+		EQUIP:COUNT:BODY = 0
+	ENDIF
+	IF EQUIP:COUNT:HAND > 0
+		ITEM:(EQUIP:COUNT:HAND) ++
+		EQUIP:COUNT:HAND = 0
+	ENDIF
+	IF EQUIP:COUNT:LEG > 0
+		ITEM:(EQUIP:COUNT:LEG) ++
+		EQUIP:COUNT:LEG = 0
+	ENDIF
 	
 	IF LOCAL:1 == 0
 		;一時的に別れる（CFLAG:21立てるだけ）
 		CFLAG:21 = 1
-		;別れ状態にする
-		CFLAG:勧誘状況 = 3
-		;待機中動作をリセット
-		CFLAG:13 = 0
-		;装備をはずす
-		SIF EQUIP:装着中服ID > 0
-			DITEMTYPE:(EQUIP:装着中服ID - 1500):0 = -1
 	ELSE
-		;完全に別れる（キャラデータ削除）
-		;DELCHARA TARGET
-		;別れ状態にする
-		CFLAG:勧誘状況 = 3
-		;待機中動作をリセット
-		CFLAG:13 = 0
-		;装備をはずす
-		SIF EQUIP:装着中服ID > 0
-			DITEMTYPE:(EQUIP:装着中服ID - 1500):0 = -1
+		;完全に別れる（キャラデータリセット）
+		FOR TEMP, 0, VARSIZE("BASE")
+			MAXBASE:COUNT:TEMP = CSVBASE(COUNT, TEMP)
+		NEXT
+		FOR TEMP, 0, VARSIZE("ABL")
+			ABL:COUNT:TEMP = CSVABL(COUNT, TEMP)
+		NEXT
+		FOR TEMP, 0, VARSIZE("TALENT")
+			TALENT:COUNT:TEMP = CSVTALENT(COUNT, TEMP)
+		NEXT
+		FOR TEMP, 0, VARSIZE("MARK")
+			MARK:COUNT:TEMP = CSVMARK(COUNT, TEMP)
+		NEXT
+		FOR TEMP, 0, VARSIZE("EXP")
+			EXP:COUNT:TEMP = CSVEXP(COUNT, TEMP)
+		NEXT
+		FOR TEMP, 0, VARSIZE("JUEL")
+			JUEL:COUNT:TEMP = CSVJUEL(COUNT, TEMP)
+		NEXT
+		FOR TEMP, 0, VARSIZE("EQUIP")
+			EQUIP:COUNT:TEMP = CSVEQUIP(COUNT, TEMP)
+		NEXT
+		FOR TEMP, 0, VARSIZE("CFLAG")
+			CFLAG:COUNT:TEMP = CSVCFLAG(COUNT, TEMP)
+		NEXT
 	ENDIF
-
 	;対象、助手を戻す
 	TARGET = -1
 	ASSI = -1

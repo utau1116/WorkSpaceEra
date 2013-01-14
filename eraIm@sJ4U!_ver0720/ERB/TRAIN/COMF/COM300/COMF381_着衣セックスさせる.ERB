@@ -39,8 +39,8 @@ SOURCE:不潔 = Y*10 + 60
 ;特殊ソース処理
 ;-------------------------------------------------
 ;抑圧、抵抗持ちには、抑鬱ソース追加
-;SIF TALENT:抑圧 || TALENT:抵抗
-;	SOURCE:反感 += 700
+SIF TALENT:抑圧 || TALENT:抵抗
+	SOURCE:反感 += 700
 
 ;調教者が処女（一回のみ）
 IF TALENT:PLAYER:処女
@@ -49,10 +49,8 @@ IF TALENT:PLAYER:処女
 	TIMES SOURCE:屈従 , 3.00
 	PRINTFORML ＜%CALLNAME:PLAYER%は処女を失いました＞
 	;異常経験追加
-	IF TALENT:PLAYER:処女 == 1
+	SIF TALENT:PLAYER:処女 == 1
 		EXP:異常経験 += 1
-		;SETBIT CFLAG:3,10
-	ENDIF
 	TALENT:PLAYER:処女 = 0
 ENDIF
 

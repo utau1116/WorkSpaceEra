@@ -171,24 +171,11 @@ IF TALENT:TARGET:童貞
 ENDIF
 
 ;キス未経験喪失
-IF TALENT:PLAYER:キス未経験 && EXP_UP(96, PLAYER) > 0
-	;SIF EXP_UP(96, PLAYER)
-	;SELECTCASE SELECTCOM
-	;	CASE [[調教:愛撫]],[[調教:キスする]],[[調教:バードキス]],[[調教:ソフトキス]],[[調教:ディープキス]]
-	;		IF TFLAG:SELECTCOM分岐 != 99
-				PRINTW キス未経験喪失
-	;		ENDIF
-	;ENDSELECT
-ENDIF
-IF TALENT:TARGET:キス未経験 && EXP_UP(96, TARGET) > 0
-	;SIF EXP_UP(96, TARGET) > 0
-	;SELECTCASE SELECTCOM
-	;	CASE [[調教:愛撫]],[[調教:キスする]],[[調教:バードキス]],[[調教:ソフトキス]],[[調教:ディープキス]]
-	;		IF TFLAG:SELECTCOM分岐 != 99
-				PRINTFORMW キス未経験喪失(%CALLNAME:TARGET%)
-	;		ENDIF
-	;ENDSELECT
-ENDIF
+SIF TALENT:PLAYER:キス未経験 && EXP_UP(96, PLAYER) > 0
+	PRINTW キス未経験喪失
+	
+SIF TALENT:TARGET:キス未経験 && EXP_UP(96, TARGET) > 0
+	PRINTFORMW キス未経験喪失(%CALLNAME:TARGET%)
 
 ;異常経験による快楽ソース上下
 
@@ -490,7 +477,6 @@ CALL KOJO_MESSAGE_SEND("MARK",0,TARGET,0,0)
 ;従順上昇による[抵抗]の消滅チェック(イタズラ中は禁止)
 ;-------------------------------------------------
 CALL JUJUN_UP_CHECK
-;ENDIF
 ;-------------------------------------------------
 ;調教ソースの表示
 ;-------------------------------------------------
@@ -548,7 +534,6 @@ FOR LOCAL:1,0,CHARANUM
 		IF !LOCAL:3
 			PRINTL
 			CALL PRINTCOLORL(SET_COLOR_FUNC(LOCAL:1), @"%CALLNAME:(LOCAL:1)%")
-			;PRINTFORML %CALLNAME:(LOCAL:1)%
 		ENDIF
 		LOCAL:3 ++
 		LOCAL:2 = CUP:(LOCAL:1):LOCAL - CDOWN:(LOCAL:1):LOCAL

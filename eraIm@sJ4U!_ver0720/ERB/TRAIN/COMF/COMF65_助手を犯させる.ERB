@@ -170,21 +170,18 @@ SOURCE:反感 = 500
 ;特殊ソース処理
 ;-------------------------------------------------
 ;抑圧、抵抗持ちには、抑鬱ソース追加
-;SIF TALENT:抑圧 || TALENT:抵抗
-;	SOURCE:反感 += 500
+SIF TALENT:抑圧 || TALENT:抵抗
+	SOURCE:反感 += 500
 
 ;助手が処女の場合、屈服逸脱が倍化し、従順が2になる。ただし一度きり
 IF TALENT:PLAYER:処女 == 1
 	TIMES SOURCE:屈従 , 5.00
 	TIMES SOURCE:逸脱 , 3.00
 	TALENT:PLAYER:処女 = 0
-	;IF !GETBIT(CFLAG:3,4)
-		;異常経験追加（一回きり）
-		EXP:異常経験 += 1
-		;SETBIT CFLAG:3,4
-	;ENDIF
+	;異常経験追加
+	EXP:異常経験 += 1
 	IF ABL:親密 < 2
-		PRINTFORML そして%ABLNAME:0%が2になった
+		PRINTFORML そして親密が2になった
 		ABL:親密 = 2
 	ENDIF
 ENDIF
