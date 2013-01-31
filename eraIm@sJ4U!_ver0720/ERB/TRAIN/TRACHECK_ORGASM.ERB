@@ -143,46 +143,8 @@ NOWEX:ARG:6 = M
 ;絶頂時の追加処理
 ;-------------------------------------------------
 
-;快楽依存の処理
-;絶頂の部位と強度の合計が一定以上で刻印を取得する
-;R = C + V * 2 + A * 2 + B
-;Rが4以上で快楽依存３に相当
-;IF R >= 3 && MARK:ARG:1 < 3
-;	TCVAR:ARG:絶頂による快楽強度 = 3
-;Rが3以上で快楽依存２に相当
-;ELSEIF R >= 2 && MARK:ARG:1 < 2
-;	TCVAR:ARG:絶頂による快楽強度 = 2
-;Rが2以上で快楽依存１に相当
-;ELSEIF R >= 1 && MARK:ARG:1 < 1
-;	TCVAR:ARG:絶頂による快楽強度 = 1
-;ELSE
-;	TCVAR:ARG:絶頂による快楽強度 = 0
-;ENDIF
-
 VARSET LOCAL
 ;四重絶頂以上かチェック
-;REPEAT 5
-;	IF C && COUNT == 0
-;		LOCAL:COUNT = C
-;	ELSEIF V && COUNT == 1
-;		LOCAL:COUNT = V
-;	ELSEIF A && COUNT == 2
-;		LOCAL:COUNT = A
-;	ELSEIF B && COUNT == 3
-;		LOCAL:COUNT = B
-;	ELSEIF M && COUNT == 4
-;		LOCAL:COUNT = M
-;	ELSE
-;		CONTINUE
-;	ENDIF
-;	
-;	;絶頂の種類数カウント
-;	LOCAL:5 ++
-;	;最強絶頂数カウント
-;	SIF LOCAL:COUNT >= 9
-;		LOCAL:6 ++
-;REND
-
 ;LOCAL:1に絶頂中、最低の強度を保存
 LOCAL:2 = 99
 REPEAT 5
@@ -192,11 +154,10 @@ REPEAT 5
 		LOCAL = V
 	SIF COUNT == 2
 		LOCAL = A
-	SIF LOCAL == 3
+	SIF COUNT == 3
 		LOCAL = B
-	SIF LOCAL == 4
+	SIF COUNT == 4
 		LOCAL = M
-		
 	SIF LOCAL > 0
 		LOCAL:1 = LOCAL
 	IF LOCAL:1 > 0
@@ -332,10 +293,6 @@ EX:ARG:3 += B
 EX:ARG:6 += M
 ;絶頂経験を増やす
 EXP:ARG:絶頂経験 += C + V + A + B + M
-;EXP:ARG:Ｃ絶頂経験 += C
-;EXP:ARG:Ｖ絶頂経験 += V
-;EXP:ARG:Ａ絶頂経験 += A
-;EXP:ARG:Ｂ絶頂経験 += B
 
 ;ビデオ
 IF TEQUIP:ARG:ビデオ撮影
@@ -390,91 +347,118 @@ RETURN 1
 ;COMMENT	
 ;-----------------------------------------------------------
 @MESSAGE_PALAMCNG_B2
-IF NOWEX:6
-	IF !GETBIT(CFLAG:異常経験,2)
-		EXP:異常経験 ++
-		SETBIT CFLAG:異常経験,2
+;絶頂してなかったら戻る
+SIF !NOWEX:TARGET:4
+	RETURN
+;表示用
+LOCALS:0 = 絶頂Ｃ
+LOCALS:1 = 絶頂Ｖ
+LOCALS:2 = 絶頂Ａ
+LOCALS:3 = 絶頂Ｂ
+LOCALS:4 = 絶頂Ｍ
+FOR LOCAL, 0, 5
+	IF LOCAL < 4
+		LOCAL:1 = NOWEX:LOCAL
+	ELSE
+		LOCAL:1 = NOWEX:6
 	ENDIF
-	PRINTL 四 重 絶 頂
-	PRINTL (それぞれ8倍の珠が得られます)
-ELSEIF NOWEX:5
-	SELECTCASE NOWEX:5
+	SIF LOCAL:1 <= 0
+		CONTINUE
+	SELECTCASE LOCAL:1
 		CASE 1
-			PRINTL Ｃ＆Ｖ＆Ａ絶頂
-			PRINTL (それぞれ4倍の珠が得られます)
+			
 		CASE 2
-			PRINTL Ｂ＆Ｖ＆Ａ絶頂
-			PRINTL (それぞれ4倍の珠が得られます)
+			PRINT 強
 		CASE 3
-			PRINTL Ｃ＆Ｂ＆Ａ絶頂
-			PRINTL (それぞれ4倍の珠が得られます)
+			PRINT 超強
 		CASE 4
-			PRINTL Ｃ＆Ｖ＆Ｂ絶頂
-			PRINTL (それぞれ4倍の珠が得られます)
+			PRINT 最強
+		CASEELSE
+			PRINT エラー
 	ENDSELECT
-ELSEIF NOWEX:4
-	SELECTCASE NOWEX:4
-		CASE 1
-			PRINTL Ｃ＆Ｖ絶頂
-			PRINTL (それぞれ2倍の珠が得られます)
-		CASE 2
-			PRINTL Ｃ＆Ａ絶頂
-			PRINTL (それぞれ2倍の珠が得られます)
-		CASE 3
-			PRINTL Ｖ＆Ａ絶頂
-			PRINTL (それぞれ2倍の珠が得られます)
-		CASE 4
-			PRINTL Ｃ＆Ｂ絶頂
-			PRINTL (それぞれ2倍の珠が得られます)
-		CASE 5
-			PRINTL Ｖ＆Ｂ絶頂
-			PRINTL (それぞれ2倍の珠が得られます)
-		CASE 6
-			PRINTL Ａ＆Ｂ絶頂
-			PRINTL (それぞれ2倍の珠が得られます)
-	ENDSELECT
-ELSEIF NOWEX:3
-	IF NOWEX:3 == 2
-		PRINTL 強絶頂Ｂ
-	ELSE
-		PRINTL 絶頂Ｂ
-	ENDIF
-ELSEIF NOWEX:2
-	IF NOWEX:2 == 2
-		PRINTL 強絶頂Ａ
-	ELSE
-		PRINTL 絶頂Ａ
-	ENDIF
-ELSEIF NOWEX:1
-	IF NOWEX:1 == 2
-		PRINTL 強絶頂Ｖ
-	ELSE
-		PRINTL 絶頂Ｖ
-	ENDIF
-ELSEIF NOWEX:0
-	IF NOWEX:0 == 2
-		PRINTL 強絶頂Ｃ
-	ELSE
-		PRINTL 絶頂Ｃ
-	ENDIF
-ENDIF
+	PRINTFORML %LOCALS:LOCAL%
+NEXT
+LOCALS:0 = Ｃ
+LOCALS:1 = Ｖ
+LOCALS:2 = Ａ
+LOCALS:3 = Ｂ
+LOCALS:4 = Ｍ
+SELECTCASE NOWEX:TARGET:4
+	CASE 5
+		SELECTCASE NOWEX:TARGET:5
+			CASE 4
+				PRINTL 最 強 五 重 絶 頂
+			CASE 3
+				PRINTL 超 強 五 重 絶 頂
+			CASE 2
+				PRINTL 強 五 重 絶 頂
+			CASE 1
+				PRINTL 五 重 絶 頂
+		ENDSELECT
+		LOCAL:3 = 12
+	CASE 4
+		SELECTCASE NOWEX:TARGET:5
+			CASE 4
+				PRINTL 最 強 四 重 絶 頂
+			CASE 3
+				PRINTL 超 強 四 重 絶 頂
+			CASE 2
+				PRINTL 強 四 重 絶 頂
+			CASE 1
+				PRINTL 四 重 絶 頂
+		ENDSELECT
+		LOCAL:3 = 8
+	CASE 1,2,3
+		VARSET LOCAL
+		FOR LOCAL, 0, 5
+			IF LOCAL < 4
+				LOCAL:1 = NOWEX:LOCAL
+			ELSE
+				LOCAL:1 = NOWEX:Ｍ絶頂
+			ENDIF
+			IF LOCAL:1
+				SIF LOCAL:2 > 0
+					PRINT ＆
+				PRINTFORM %LOCALS:LOCAL%
+				LOCAL:2 ++
+			ENDIF
+		NEXT
+		PRINTL 絶頂
+		IF NOWEX:TARGET:4 == 3
+			LOCAL:3 = 4
+		ELSEIF NOWEX:TARGET:4 == 2
+			LOCAL:3 = 2
+		ENDIF
+	CASEELSE
+ENDSELECT
+SIF NOWEX:TARGET:4 > 1
+	PRINTL (それぞれ{LOCAL:3}倍の珠が得られます)
+
 
 ;絶頂による欲望ＬＶアップ
 LOCAL = 0
-SIF NOWEX:0 >= 2 || NOWEX:3 >= 2 || NOWEX:1 || NOWEX:2
+SIF NOWEX:Ｃ絶頂 >= 2 || NOWEX:Ｂ絶頂 >= 2 || NOWEX:Ｖ絶頂 || NOWEX:Ａ絶頂
 	LOCAL = 1
-SIF NOWEX:1 >= 2 || NOWEX:2 >= 2
-	LOCAL = 2
-SIF (NOWEX:0 >= 2 || NOWEX:3 >= 2) && NOWEX:4
-	LOCAL = 2
-SIF NOWEX:5
+SIF NOWEX:Ｖ絶頂 >= 2 || NOWEX:Ａ絶頂 >= 2
 	LOCAL = 3
-SIF NOWEX:6
-	LOCAL = 4
+SIF (NOWEX:Ｃ絶頂 >= 2 || NOWEX:Ｂ絶頂 >= 2) && NOWEX:TARGET:4 > 1
+	LOCAL = 3
+SIF NOWEX:TARGET:4 > 2
+	LOCAL = 7
 ;自制心があると１下がる
 SIF TALENT:自制心
 	LOCAL -= 1
-
+SIF NOWEX:TARGET:4 > 3
+	LOCAL = 10
+SIF NOWEX:TARGET:4 > 4
+	LOCAL = 20
+;最強絶頂時
+IF NOWEX:TARGET:5 == 4
+	SIF NOWEX:TARGET:4 > 3
+		LOCAL = 30
+	SIF NOWEX:TARGET:4 > 4
+		LOCAL = 50
+ENDIF
 IF ABL:欲望 < LOCAL
 	ABL:欲望 ++
 	PRINTFORML そして欲望がLV{LOCAL}になった

@@ -337,20 +337,20 @@ IF SELECTCOM == PREVCOM && TFLAG:特殊COM == TFLAG:前回の特殊COM
 ; && (SELECTCOM < 350 || SELECTCOM >= 500)
 
 	;UP:0,1,2は絶頂に絡むので先に処理してある
-	UP:欲情 /= 2
-	UP:恭順 /= 2
-	UP:屈服 /= 2
-	UP:習得 /= 2
-	UP:恥情 /= 2
-	UP:恐怖 /= 2
-	UP:苦痛 /= 2
-	UP:好意 /= 2
-	UP:優越 /= 2
-	UP:生活 /= 2
-	UP:情感 /= 2
-	UP:歌唱 /= 2
-	UP:被写 /= 2
-	UP:舞踊 /= 2
+	CUP:欲情 /= 2
+	CUP:恭順 /= 2
+	CUP:屈服 /= 2
+	CUP:習得 /= 2
+	CUP:恥情 /= 2
+	CUP:恐怖 /= 2
+	CUP:苦痛 /= 2
+	CUP:好意 /= 2
+	CUP:優越 /= 2
+	CUP:生活 /= 2
+	CUP:情感 /= 2
+	CUP:歌唱 /= 2
+	CUP:被写 /= 2
+	CUP:舞踊 /= 2
 	;ムード減少
 	TIMES TFLAG:ムード, 0.90
 ENDIF
@@ -427,13 +427,11 @@ NEXT
 ;-------------------------------------------------
 ;触手の射精時の口上
 ;-------------------------------------------------
-;DEBUG	CALL KOJO_MESSAGE_PALAMCNG_E
 CALL KOJO_MESSAGE_SEND("PALAM",5,TARGET,0,0)
 ;-------------------------------------------------
 ;奴隷の絶頂時の口上
 ;-------------------------------------------------
 CALL MESSAGE_PALAMCNG_B2
-;DEBUG	CALL KOJO_MESSAGE_PALAMCNG_B
 CALL KOJO_MESSAGE_SEND("PALAM",2,TARGET,0,0)
 ;-------------------------------------------------
 ;調教者の射精時の口上
@@ -452,17 +450,14 @@ IF NOWEX:TARGET:11
 		PRINT 大量
 	PRINTFORML 射精(%CALLNAME:TARGET%)
 ENDIF
-;DEBUG	CALL KOJO_MESSAGE_PALAMCNG_A
 CALL KOJO_MESSAGE_SEND("PALAM",1,TARGET,0,0)
 ;-------------------------------------------------
 ;調教後の口上
 ;-------------------------------------------------
-;DEBUG	CALL KOJO_MESSAGE_PALAMCNG_C
 CALL KOJO_MESSAGE_SEND("PALAM",3,TARGET,0,0)
 ;-------------------------------------------------
 ;パラメータ変動による口上
 ;-------------------------------------------------
-;DEBUG	CALL KOJO_MESSAGE_PALAMCNG_D
 CALL KOJO_MESSAGE_SEND("PALAM",4,TARGET,0,0)
 ;-------------------------------------------------
 ;刻印取得のチェック(イタズラ中は禁止)
@@ -471,7 +466,6 @@ CALL MARK_GOT_CHECK(TARGET)
 ;-------------------------------------------------
 ;刻印取得による口上(イタズラ中は禁止)
 ;-------------------------------------------------
-;DEBUG	CALL KOJO_MESSAGE_MARKCNG
 CALL KOJO_MESSAGE_SEND("MARK",0,TARGET,0,0)
 ;-------------------------------------------------
 ;従順上昇による[抵抗]の消滅チェック(イタズラ中は禁止)

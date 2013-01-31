@@ -36,8 +36,12 @@ DO
 							CONTINUE
 						ELSE
 							MONEY -= å_ñÒã‡(LOCAL:2)
-							;CALL NEWCHARA_INIT(N:(LOCAL:2))
+							CALL NEWCHARA_INIT(LOCAL:2)
 							PRINTFORMW %CALLNAME:(LOCAL:2)%Çä©óUÇµÇ‹ÇµÇΩÅI
+							FOR LOCAL, 0, 5
+								SIF N:LOCAL == LOCAL:2
+									N:LOCAL = 0
+							NEXT
 							LOCAL:3 = 1
 							BREAK
 						ENDIF

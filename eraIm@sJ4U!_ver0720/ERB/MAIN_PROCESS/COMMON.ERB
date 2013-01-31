@@ -1828,6 +1828,28 @@ CFLAG:A:76 = DAY:2
 MAXBASE:A:ストレス = 100
 BASE:A:ストレス = 0
 
+;経験からVO,VI,DAの技能アップ
+FOR LOCAL, 0, 99
+	IF ABL:ARG:Ｖｏ技能 <= 99 && ARG != MASTER
+		IF EXP:ARG:歌唱経験 >= ABLLVUP_EXP(ABL:ARG:Ｖｏ技能)
+			ABL:ARG:Ｖｏ技能++
+			BASE:ARG:VO倍率 += STATUSUP_VOVIDA(ARG, 1)
+		ENDIF
+	ENDIF
+	IF ABL:ARG:Ｖｉ技能 <= 99 && ARG != MASTER
+		IF EXP:ARG:被写経験 >= ABLLVUP_EXP(ABL:ARG:Ｖｉ技能)
+			ABL:ARG:Ｖｉ技能++
+			BASE:ARG:VI倍率 += STATUSUP_VOVIDA(ARG, 2)
+		ENDIF
+	ENDIF
+	IF ABL:ARG:Ｄａ技能 <= 99 && ARG != MASTER
+		IF EXP:ARG:舞踊経験 >= ABLLVUP_EXP(ABL:ARG:Ｄａ技能)
+			ABL:ARG:Ｄａ技能++
+			BASE:ARG:DA倍率 += STATUSUP_VOVIDA(ARG, 3)
+		ENDIF
+	ENDIF
+NEXT
+
 ;パートナーのキャラID設定
 ;CFLAG:A:81 = FLAG:現在コスト
 FLAG:998 += 1
