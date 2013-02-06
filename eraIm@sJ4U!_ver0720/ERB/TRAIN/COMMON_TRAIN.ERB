@@ -171,6 +171,10 @@ IF ARG:1
 			RETURNF "パイズリフェラ"
 		CASE 13
 			RETURNF "交互挿入"
+		CASE 14
+			RETURNF "強制放尿"
+		CASE 15
+			RETURNF "Ｗフェラ"
 		CASE 62
 			RETURNF "デコちゅー"
 	ENDSELECT
@@ -211,6 +215,12 @@ ELSE
 			CASE 44
 				SIF TEQUIP:触手プレイ
 					RETURNF "触手緊縛"
+			CASE 116
+				SIF TFLAG:45
+					RETURNF "剃毛される"
+			CASE 173
+				SIF TFLAG:45
+					RETURNF "腹パンされる"
 			CASE 280 TO 284
 				RETURNF CSTR:(ARG - 200)
 			CASE 323

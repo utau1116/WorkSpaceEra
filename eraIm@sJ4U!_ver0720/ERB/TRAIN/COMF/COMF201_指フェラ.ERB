@@ -1,87 +1,80 @@
 ;-------------------------------------------------
-;イラマチオ
-;ハードな調教コマンド、レベル2
+;指フェラ
+;系コマンド、レベル
 ;-------------------------------------------------
-@COM80
-
-;-------------------------------------------------
-;実行決定
-;-------------------------------------------------
-STR:0 = イラマチオ
+@COM201
 ;-------------------------------------------------
 ;COM別FLAGの設定
 ;-------------------------------------------------
 ;行為者
 TCVAR:116 = TARGET
-;TCVAR:2 射精箇所フラグ（-1=コンドーム 1=膣内 2=アナル 3=手淫 4=口淫 5=パイズリ 6=素股 7=足コキ 8=体表 9=アナル奉仕 10=道具 11=触手）
+TFLAG:100 = 1
+;既成事実１に相当
+TFLAG:200 = 1
 
-LOCALS = {TARGET}/
-CSTR:PLAYER:10 += LOCALS
-TCVAR:PLAYER:2 = 4
-;強度
-TCVAR:PLAYER:4 = 2000
 ;-------------------------------------------------
 ;ソース追加処理
 ;-------------------------------------------------
 ;消費体力、気力
-DOWNBASE:体力 += 150
-DOWNBASE:気力 += 200
-;DOWNBASE:疲労 += 120
-
-SOURCE:性行動 = 500
-SOURCE:痛み = 200
-SOURCE:屈従 = 1500
-SOURCE:逸脱 = 700
-SOURCE:反感 = 700
+DOWNBASE:体力 += 5
+DOWNBASE:気力 += 50
 
 ;上のほうで計算した汚れデータ
-SOURCE:不潔 = Y*40 + 100
-
+SOURCE:不潔 = Y*80 + 50
+SOURCE:屈従 = 500
+SOURCE:逸脱 = 200
+SOURCE:性行動 = 290
+SOURCE:達成 = 400
+SOURCE:反感 = 100
 
 ;-------------------------------------------------
 ;特殊ソース処理
 ;-------------------------------------------------
+;抑圧、抵抗持ちには、抑鬱ソース追加
+SIF TALENT:抑圧 || TALENT:抵抗
+	SOURCE:反感 += 100
+
 ;Ｍ感覚を設定している場合快Ｍソース等取得
-SIF GETBIT(FLAG:62 ,22)
-	CALL SOURCE_M_COM80
-	
+SIF FLAG:62 & 4194304
+	CALL SOURCE_M_COM201
+
+;合意がないと好感度が下がる
+IF !TALENT:152 && !TFLAG:48
+	CFLAG:2 -= 9
+	SOURCE:反感 += 400
+ENDIF
+
 ;-------------------------------------------------
 ;汚れの処理
 ;-------------------------------------------------
-;奴隷の口⇔調教者のＰの汚れが移動
-STAIN:口 |= STAIN:PLAYER:Ｐ
-STAIN:PLAYER:Ｐ |= STAIN:口
+;奴隷の口⇔調教者の手の汚れが移動
+STAIN:0 |= STAIN:PLAYER:1
+STAIN:PLAYER:1 |= STAIN:0
 
 ;-------------------------------------------------
 ;経験の処理
 ;-------------------------------------------------
-;フェラ経験
-;EXP:口淫経験 ++
 ;同性愛　レズなら戻り値1ゲイなら戻り値2
 IF HETEROSEX(TARGET,PLAYER)
-	EXP:(39 + HETEROSEX(TARGET,PLAYER)) += 7
-	EXP:PLAYER:(39 + HETEROSEX(TARGET,PLAYER)) += 7
+	EXP:(39 + HETEROSEX(TARGET,PLAYER)) += 3
+	EXP:PLAYER:(39 + HETEROSEX(TARGET,PLAYER)) += 3
 ENDIF
 
-;愛情経験(マゾっ気5以上限定）
-SIF TALENT:恋慕 && ASSIPLAY == 0 && ABL:マゾっ気 >= 5
-	EXP:愛情経験 += 1
+EXP:フェラ経験++
 
 RETURN 1
 
-@CAN_COM80(ARG)
+@CAN_COM201(ARG)
 SKIPDISP ARG
-PRINTL イラマチオ
+PRINTL 指フェラ
 ;-------------------------------------------------
 ;実行判定処理
 ;-------------------------------------------------
 A = 0
 S = 0
-
 ;すべての命令に共通の要素を考慮
 ;(従順が高いと命令に従いやすいなど)
 CALL COM_ORDER
-
 ;ABL:欲望
 IF ABL:欲望
 	SIF S
@@ -100,15 +93,6 @@ IF ABL:奉仕精神
 	PRINTV 'LV,ABL:奉仕精神,'(,ABL:奉仕精神 * 4,')
 	S = 1
 ENDIF
-;ABL:精液中毒
-IF ABL:精液中毒
-	SIF S
-		PRINT  + 
-	A += ABL:精液中毒 * 3
-	PRINT 精液中毒
-	PRINTV 'LV,ABL:精液中毒,'(,ABL:精液中毒 * 3,')
-	S = 1
-ENDIF
 
 IF MARK:快楽依存
 	SIF S
@@ -118,6 +102,7 @@ IF MARK:快楽依存
 	PRINTV 'LV,MARK:快楽依存,'(,MARK:快楽依存 * 1,')
 	S = 1
 ENDIF
+
 ;PALAM:欲情
 IF GETPALAMLV(PALAM:欲情,5)
 	SIF S
@@ -131,11 +116,12 @@ ENDIF
 ;恥じらい
 IF TALENT:恥じらい
 	PRINT  - 
-	A -= 1
+	A -= 3
 	PRINT 恥じらい
-	PRINTV '(,1,')
+	PRINTV '(,3,')
 	S = 1
 ENDIF
+
 ;汚臭鈍感
 IF TALENT:汚臭鈍感
 	SIF S
@@ -145,6 +131,7 @@ IF TALENT:汚臭鈍感
 	PRINTV '(,1,')
 	S = 1
 ENDIF
+
 ;汚臭敏感
 IF TALENT:汚臭敏感
 	PRINT  - 
@@ -165,11 +152,12 @@ ENDIF
 ;快感の否定（淫乱、娼婦で無効）
 IF TALENT:快感の否定 && !TALENT:淫乱
 	PRINT  - 
-	A -= 1
+	A -= 3
 	PRINT 快感の否定
-	PRINTV '(,1,')
+	PRINTV '(,3,')
 	S = 1
 ENDIF
+
 ;恋慕
 IF TALENT:恋慕 && ASSIPLAY == 0
 	SIF S
@@ -178,25 +166,6 @@ IF TALENT:恋慕 && ASSIPLAY == 0
 	PRINT 恋慕
 	PRINTV '(,5,')
 	S = 5
-ENDIF
-;親愛
-IF TALENT:恋慕 > 1 && ASSIPLAY == 0
-	SIF S
-		PRINT  + 
-	A += 5
-	PRINT 親愛
-	PRINTV '(,5,')
-	S = 5
-ENDIF
-
-;調教者がふたなり
-IF TALENT:PLAYER:ふたなり
-	SIF S
-		PRINT  + 
-	A += 8
-	PRINT ふたなり
-	PRINTV '(,8,')
-	S = 1
 ENDIF
 
 Y = 0
@@ -211,6 +180,7 @@ SIF STAIN:PLAYER:Ｐ & 8
 	Y += 7
 SIF STAIN:PLAYER:Ｐ & 16
 	Y += 15
+
 Y = Y * (2 - TALENT_LV(TARGET, "汚臭耐性")) / 2
 
 ;汚れあり
@@ -228,11 +198,11 @@ IF Y
 	S = 1
 ENDIF
 
-;合計を表示(36以上で実行)
+;合計を表示(25以上で実行)
 PRINT  = 
 PRINTV A
 
-V = 36
+V = 25
 SIF A < V
 	PRINT  < 
 SIF A == V
@@ -248,5 +218,3 @@ SKIPDISP 0
 SIF A < V
 	RETURN 0
 RETURN 1
-
-

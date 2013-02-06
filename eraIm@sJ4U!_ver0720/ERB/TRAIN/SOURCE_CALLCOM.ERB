@@ -6,6 +6,7 @@
 ;COMMENT	@COMを呼び出す。コンボ発生判定もここ
 ;-----------------------------------------------------------
 @CALL_COM(ARG)
+DEBUGPRINTFORML SELECTCOM = {SELECTCOM}　PREVCOM = {PREVCOM}
 ;=== ウフフ系コンボ ===
 IF TFLAG:うふふ
 	;シックスナイン
@@ -55,28 +56,40 @@ IF TFLAG:うふふ
 	ELSEIF GET_INSERT_CHARA(ARG,"B","P") == PLAYER && (GET_INSERT_CHARA(ARG,"P","M") == PLAYER || GET_INSERT_CHARA(ARG,"C","M") == PLAYER) && (SELECTCOM == [[調教:クンニ]] || SELECTCOM == [[調教:パイズリ]])
 		TFLAG:特殊COM = 8
 	;ダブルフェラ
-	;ELSEIF GET_INSERT_CHARA(ARG,"M","P") == PLAYER && (MASTER_POSE(4,1,1) && MASTER_POSE(4,1,1) != ARG )
-	;	TFLAG:特殊COM = 9
-	;	TFLAG:派生COM番号 = 68
+	ELSEIF GET_INSERT_CHARA(ARG,"M","P") == PLAYER && (MASTER_POSE(4,1,1) && MASTER_POSE(4,1,1) != ARG )
+		TFLAG:特殊COM = 9
+		TFLAG:派生COM番号 = 68
 	;ダブル素股
-	;ELSEIF GET_INSERT_CHARA(ARG,"C","P") == PLAYER && (MASTER_POSE(2,1,1) && MASTER_POSE(2,1,1) != ARG )
-	;	TFLAG:特殊COM = 10
+	ELSEIF GET_INSERT_CHARA(ARG,"C","P") == PLAYER && (MASTER_POSE(2,1,1) && MASTER_POSE(2,1,1) != ARG )
+		TFLAG:特殊COM = 10
 	;ダブルパイズリ
-	;ELSEIF GET_INSERT_CHARA(ARG,"B","P") == PLAYER && (MASTER_POSE(5,1,1) && MASTER_POSE(5,1,1) != ARG )
-	;	TFLAG:特殊COM = 11
+	ELSEIF GET_INSERT_CHARA(ARG,"B","P") == PLAYER && (MASTER_POSE(5,1,1) && MASTER_POSE(5,1,1) != ARG )
+		TFLAG:特殊COM = 11
 	;パイズリフェラ
 	ELSEIF (GET_INSERT_CHARA(ARG,"B","P") == PLAYER && GET_INSERT_CHARA(ARG,"M","P",1) == PLAYER) || (GET_INSERT_CHARA(ARG,"M","P") == PLAYER && GET_INSERT_CHARA(ARG,"B","P",1) == PLAYER)
 		TFLAG:特殊COM = 12
+	;強制放尿
+	ELSEIF SELECTCOM == [[調教:放尿]]
+		;おもらし癖なし、従順４以上欲望３以上、マゾっ気３以上orおもらし癖ありで利尿剤が無い
+		IF (!TALENT:57 && ABL:0 >= 4 && ABL:1 >= 3 && ABL:8 >= 3) || (TALENT:57 && !TEQUIP:22)
+			TFLAG:特殊COM = 14
+			TFLAG:派生COM番号 = 86
+		ENDIF
+	;Ｗフェラ
+	ELSEIF GET_INSERT_CHARA(ARG,"M","P") == PLAYER && GET_INSERT_CHARA(ASSI,"P","M") == ASSI
+		TFLAG:特殊COM = 15
+		TFLAG:派生COM番号 = 66
 	ENDIF
 ENDIF
 
 ;=== 日常系 ===
 IF !TFLAG:うふふ
-
 	;デコちゅー
-	ELSEIF SELECTCOM == ([[調教:バードキス]] || [[調教:ソフトキス]]) && PREVCOM == [[調教:頭を撫でる]]
+	IF (SELECTCOM == [[調教:バードキス]] || SELECTCOM == [[調教:ソフトキス]]) && PREVCOM == [[調教:頭を撫でる]]
 		TFLAG:特殊COM = 62
-
+		;SIF TFLAG:特殊COM == 62
+		;	DEBUGPRINTFORML でこチュー1 RESULT = {RESULT}
+	ENDIF
 ENDIF
 
 ;=== デート系 ===

@@ -1,77 +1,109 @@
 ;-------------------------------------------------
-;イラマチオ
-;ハードな調教コマンド、レベル2
+;Ｗフェラ
+;調教対象→主人、助手へのコマンド、及びレズプレイ、レベル2
 ;-------------------------------------------------
-@COM80
-
-;-------------------------------------------------
-;実行決定
-;-------------------------------------------------
-STR:0 = イラマチオ
+@SCOM15
 ;-------------------------------------------------
 ;COM別FLAGの設定
 ;-------------------------------------------------
 ;行為者
 TCVAR:116 = TARGET
 ;TCVAR:2 射精箇所フラグ（-1=コンドーム 1=膣内 2=アナル 3=手淫 4=口淫 5=パイズリ 6=素股 7=足コキ 8=体表 9=アナル奉仕 10=道具 11=触手）
+;二人目
+;LOCAL = MASTER_POSE(4,1,1)
 
-LOCALS = {TARGET}/
+LOCALS = {TARGET}
 CSTR:PLAYER:10 += LOCALS
-TCVAR:PLAYER:2 = 4
+CSTR:ASSI:10 += LOCALS
+TCVAR:MASTER:2 = 4
+
 ;強度
-TCVAR:PLAYER:4 = 2000
+TCVAR:MASTER:4 = 1500
+
+TCVAR:ASSI:2 = 4
+TCVAR:ASSI:4 = 1500
+;奉仕快楽
+TFLAG:30 = 1
 ;-------------------------------------------------
 ;ソース追加処理
 ;-------------------------------------------------
 ;消費体力、気力
-DOWNBASE:体力 += 150
-DOWNBASE:気力 += 200
-;DOWNBASE:疲労 += 120
+DOWNBASE:体力 += 10
+DOWNBASE:気力 += 100
 
-SOURCE:性行動 = 500
-SOURCE:痛み = 200
-SOURCE:屈従 = 1500
-SOURCE:逸脱 = 700
-SOURCE:反感 = 700
+SOURCE:情愛 = 100
+SOURCE:性行動 = 400
+SOURCE:達成 = 200
+SOURCE:屈従 = 600
+SOURCE:逸脱 = 200
+SOURCE:反感 = 200
 
 ;上のほうで計算した汚れデータ
 SOURCE:不潔 = Y*40 + 100
 
+DOWNBASE:LOCAL:体力 += 10
+DOWNBASE:LOCAL:気力 += 100
+
+SOURCE:LOCAL:情愛 = 50
+SOURCE:LOCAL:性行動 = 200
+SOURCE:LOCAL:達成 = 100
+SOURCE:LOCAL:屈従 = 300
+SOURCE:LOCAL:逸脱 = 200
+SOURCE:LOCAL:反感 = 200
+
+;上のほうで計算した汚れデータ
+SOURCE:LOCAL:不潔 = Y*40 + 100
 
 ;-------------------------------------------------
 ;特殊ソース処理
 ;-------------------------------------------------
-;Ｍ感覚を設定している場合快Ｍソース等取得
-SIF GETBIT(FLAG:62 ,22)
-	CALL SOURCE_M_COM80
-	
+;抑圧、抵抗持ちには、抑鬱ソース追加
+SIF TALENT:LOCAL:抑圧 || TALENT:LOCAL:抵抗
+	SOURCE:LOCAL:反感 += 400
+
 ;-------------------------------------------------
 ;汚れの処理
 ;-------------------------------------------------
 ;奴隷の口⇔調教者のＰの汚れが移動
-STAIN:口 |= STAIN:PLAYER:Ｐ
-STAIN:PLAYER:Ｐ |= STAIN:口
+STAIN:口 |= STAIN:MASTER:2
+STAIN:MASTER:2 |= STAIN:口
 
+;助手の口⇔調教者のＰの汚れが移動
+STAIN:LOCAL:0 |= STAIN:MASTER:2
+STAIN:MASTER:2 |= STAIN:LOCAL:0
 ;-------------------------------------------------
 ;経験の処理
 ;-------------------------------------------------
-;フェラ経験
+;射精に関係なく行われる処理はここから
+;EXP:LOCAL:口淫経験 ++
 ;EXP:口淫経験 ++
+
 ;同性愛　レズなら戻り値1ゲイなら戻り値2
 IF HETEROSEX(TARGET,PLAYER)
-	EXP:(39 + HETEROSEX(TARGET,PLAYER)) += 7
-	EXP:PLAYER:(39 + HETEROSEX(TARGET,PLAYER)) += 7
+	EXP:(39 + HETEROSEX(TARGET,PLAYER)) += 3
+	EXP:PLAYER:(39 + HETEROSEX(TARGET,PLAYER)) += 3
+ENDIF
+;同性愛　レズなら戻り値1ゲイなら戻り値2
+IF HETEROSEX(TARGET,LOCAL)
+	EXP:LOCAL:(39 + HETEROSEX(TARGET,LOCAL)) += 3
+	EXP:TARGET:(39 + HETEROSEX(TARGET,LOCAL)) += 3
+ENDIF
+;同性愛　レズなら戻り値1ゲイなら戻り値2
+IF HETEROSEX(LOCAL,PLAYER)
+	EXP:LOCAL:(39 + HETEROSEX(LOCAL,PLAYER)) += 3
+	EXP:PLAYER:(39 + HETEROSEX(LOCAL,PLAYER)) += 3
 ENDIF
 
-;愛情経験(マゾっ気5以上限定）
-SIF TALENT:恋慕 && ASSIPLAY == 0 && ABL:マゾっ気 >= 5
-	EXP:愛情経験 += 1
-
+;奴隷が猫舌持ちの場合は、調教者に嗜虐快楽経験を追加
+;SIF TALENT:TARGET:猫舌
+;	EXP:嗜虐快楽経験 += 1
+;SIF TALENT:LOCAL:猫舌
+;	EXP:LOCAL:嗜虐快楽経験 += 1
 RETURN 1
 
-@CAN_COM80(ARG)
+@CAN_SCOM15(ARG)
 SKIPDISP ARG
-PRINTL イラマチオ
+PRINTL Ｗフェラ
 ;-------------------------------------------------
 ;実行判定処理
 ;-------------------------------------------------
@@ -127,7 +159,6 @@ IF GETPALAMLV(PALAM:欲情,5)
 	PRINTV 'LV,GETPALAMLV(PALAM:欲情,5),'(,GETPALAMLV(PALAM:欲情,5) * 1,')
 	S = 1
 ENDIF
-
 ;恥じらい
 IF TALENT:恥じらい
 	PRINT  - 
@@ -141,8 +172,8 @@ IF TALENT:汚臭鈍感
 	SIF S
 		PRINT  + 
 	A += 1
-	PRINT 汚臭鈍感
-	PRINTV '(,1,')
+ 	PRINT 汚臭鈍感
+ 	PRINTV '(,1,')
 	S = 1
 ENDIF
 ;汚臭敏感
@@ -170,21 +201,29 @@ IF TALENT:快感の否定 && !TALENT:淫乱
 	PRINTV '(,1,')
 	S = 1
 ENDIF
-;恋慕
-IF TALENT:恋慕 && ASSIPLAY == 0
+;男嫌い（恋慕、親愛で無効）
+IF TALENT:男嫌い && !(TALENT:PLAYER:オトコ) && (!TALENT:恋慕 || PLAYER != MASTER)
+	PRINT  - 
+	A -= 12
+	PRINT 男嫌い
+	PRINTV '(,12,')
+	S = 1
+ENDIF
+;淫乱
+IF TALENT:淫乱 && ASSIPLAY == 0
 	SIF S
 		PRINT  + 
 	A += 5
-	PRINT 恋慕
+	PRINT 淫乱
 	PRINTV '(,5,')
 	S = 5
 ENDIF
-;親愛
-IF TALENT:恋慕 > 1 && ASSIPLAY == 0
+;娼婦
+IF TALENT:淫乱 > 1 && ASSIPLAY == 0
 	SIF S
 		PRINT  + 
 	A += 5
-	PRINT 親愛
+	PRINT 娼婦
 	PRINTV '(,5,')
 	S = 5
 ENDIF
@@ -211,6 +250,7 @@ SIF STAIN:PLAYER:Ｐ & 8
 	Y += 7
 SIF STAIN:PLAYER:Ｐ & 16
 	Y += 15
+
 Y = Y * (2 - TALENT_LV(TARGET, "汚臭耐性")) / 2
 
 ;汚れあり
@@ -228,11 +268,11 @@ IF Y
 	S = 1
 ENDIF
 
-;合計を表示(36以上で実行)
+;合計を表示(34以上で実行)
 PRINT  = 
 PRINTV A
 
-V = 36
+V = 34
 SIF A < V
 	PRINT  < 
 SIF A == V
@@ -248,5 +288,4 @@ SKIPDISP 0
 SIF A < V
 	RETURN 0
 RETURN 1
-
 

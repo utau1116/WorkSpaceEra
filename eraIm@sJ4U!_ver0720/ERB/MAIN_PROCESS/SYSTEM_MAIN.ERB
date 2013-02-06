@@ -1,14 +1,19 @@
 ;｢CALL EVENT_NEXTDAY_T｣｢CALL EVENTCHECK_M｣を追加
 ;朝イベント回避用の仕掛けを追加
-
 @EVENTFIRST
 SAVESTR:0 = なし
 SAVESTR:199 = －－－
 TARGET = -1
 ASSI = -1
+IF !GLOBAL:初期設定
+	GLOBAL:メッセージ速度 = 1
+	GLOBAL:オート時ウェイト = 500
+	GLOBAL:右クリック時ウェイト = 1000
+	GLOBAL:メッセージアニメ利用 = 1
+	GLOBAL:初期設定 = 1
+ENDIF
 ;所持可能アイテム数
 FLAG:最大所持可能アイテム数 = 999
-
 ;最初からいくつかの服を持たせる
 CALL CLOTH_FIRST
 CALL SET_SONGNAME

@@ -102,7 +102,6 @@ FOR LOCAL,0,CHARANUM
 		NEXT
 	ENDIF
 	
-	
 	;-------------------------------------------------
 	;バイブなど付けっぱなしアイテムのチェック
 	;-------------------------------------------------
@@ -171,10 +170,10 @@ IF TALENT:TARGET:童貞
 ENDIF
 
 ;キス未経験喪失
-SIF TALENT:PLAYER:キス未経験 && EXP_UP(96, PLAYER) > 0
+SIF TALENT:PLAYER:キス未経験 && EXP_UP(96, PLAYER) > 0 && !TFLAG:特殊COM == 62
 	PRINTW キス未経験喪失
 	
-SIF TALENT:TARGET:キス未経験 && EXP_UP(96, TARGET) > 0
+SIF TALENT:TARGET:キス未経験 && EXP_UP(96, TARGET) > 0 && !TFLAG:特殊COM == 62
 	PRINTFORMW キス未経験喪失(%CALLNAME:TARGET%)
 
 ;異常経験による快楽ソース上下
@@ -510,9 +509,16 @@ NEXT
 PRINTL 
 
 ;-------------------------------------------------
+;テキストの表示
+;-------------------------------------------------
+CALL MESSAGE_AFTER
+
+;-------------------------------------------------
 ;パラメータの上昇＆表示（DOWNもここで）
 ;-------------------------------------------------
 VARSET LOCAL
+;MASTERが征服、受動のソースからPALAMを得ることがあるが、表示が綺麗じゃないので、表示カット
+TCVAR:MASTER:表示カット = 1
 FOR LOCAL:1,0,CHARANUM
 	;関係ない人は省く
 	SIF LOCAL:1 != MASTER && LOCAL:1 != TARGET && LOCAL:1 != ASSI

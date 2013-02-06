@@ -27,7 +27,6 @@ NEXT
 LOCAL:1 = LOCAL:1 * (100 + LOCAL:5 * 5) / 100
 
 
-
 ;最序盤ボーナス
 IF FLAG:現在の戦闘回数 < 10
 	LOCAL:1 = LOCAL:1 * 7 / 3
@@ -51,8 +50,6 @@ ELSEIF FLAG:レッスン場 == 1 && FLAG:トレーニングルーム == 1
 ELSEIF FLAG:レッスン場 == 1
 	LOCAL:1 = LOCAL:1 * (100 + 10) / 100
 ENDIF
-
-
 
 ;難易度補正
 IF FLAG:5 == 0
