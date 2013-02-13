@@ -366,6 +366,17 @@ ENDIF
 PRINTFORMW %CALLNAME:TARGET%に%CALLNAME:MASTER%と%CALLNAME:ASSI%のペニスに同時に奉仕させた…
 
 ;-------------------------------------------------
+;60,耳かき
+;-------------------------------------------------
+@TRAIN_MESSAGE_SCOM60
+PRINTFORML %CALLNAME:PLAYER%は%CALLNAME:TARGET%に耳かきをしてもらった
+IF TFLAG:SELECTCOM分岐 == 1
+	PRINTFORML %CALLNAME:TARGET%は優しい手つきで%CALLNAME:PLAYER%の耳掃除をしている…
+ELSEIF TFLAG:SELECTCOM分岐 == -1
+	PRINTFORML %CALLNAME:TARGET%は手を滑らせ慌てている…
+ENDIF
+
+;-------------------------------------------------
 ;62,デコちゅー
 ;-------------------------------------------------
 @TRAIN_MESSAGE_SCOM62

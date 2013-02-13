@@ -84,11 +84,12 @@ ENDIF
 
 ;=== 日常系 ===
 IF !TFLAG:うふふ
+	;耳かき
+	IF SELECTCOM == [[調教:スキンシップ]] && PREVCOM == [[調教:膝枕して貰う]]
+		TFLAG:特殊COM = 60
 	;デコちゅー
-	IF (SELECTCOM == [[調教:バードキス]] || SELECTCOM == [[調教:ソフトキス]]) && PREVCOM == [[調教:頭を撫でる]]
-		TFLAG:特殊COM = 62
-		;SIF TFLAG:特殊COM == 62
-		;	DEBUGPRINTFORML でこチュー1 RESULT = {RESULT}
+	ELSEIF (SELECTCOM == [[調教:バードキス]] || SELECTCOM == [[調教:ソフトキス]]) && PREVCOM == [[調教:頭を撫でる]]
+		TFLAG:特殊COM = 62 
 	ENDIF
 ENDIF
 

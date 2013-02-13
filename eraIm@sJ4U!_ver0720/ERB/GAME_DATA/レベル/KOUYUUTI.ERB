@@ -5,38 +5,39 @@
 ;
 ;B	交友値
 ;A	次の交友値に必要な好感度
-@GIRLS_POW_EXP(ARG:0)
+@GIRLS_POW_EXP(ARG)
 ;LOCAL:0	好感度一時保存
 ;LOCAL:1	ループ用
 ;LOCAL:2	初期交友値
 
 ;初期交友値記憶
-LOCAL:2 = ABL:(ARG:0):親密
+LOCAL:2 = ABL:ARG:親密
 
-IF ABL:(ARG:0):親密 >= 99
-	ABL:(ARG:0):親密 = 99
+IF ABL:ARG:親密 >= 99
+	ABL:ARG:親密 = 99
 	RETURN
 ENDIF
+
 FOR LOCAL:1, 1, 100
-	LOCAL:0 = CFLAG:(ARG:0):2
-	B = ABL:(ARG:0):親密
+	LOCAL:0 = CFLAG:ARG:2
+	B = ABL:ARG:親密
 	POWER A, (B + 1), 2
 	IF LOCAL:0 >= A * 10
-		ABL:(ARG:0):親密 += 1
-		TRYCALLFORM FRIEND_LV_UP_{ARG:0}(ABL:(ARG:0):親密, ARG:0)
-		IF MAXBASE:(ARG:0):ボルテージ < 100
-			MAXBASE:(ARG:0):ボルテージ += 10
-			;BASE:(ARG:0):ボルテージ += 10
+		ABL:ARG:親密 += 1
+		TRYCALLFORM FRIEND_LV_UP_{ARG:0}(ABL:ARG:親密, ARG)
+		IF MAXBASE:ARG:ボルテージ < 100
+			MAXBASE:ARG:ボルテージ += 10
+			;BASE:ARG:ボルテージ += 10
 		ENDIF
 	ENDIF
 NEXT
 ;初期交友値より上がっていればメッセージ表示
-IF (ABL:(ARG:0):親密 - LOCAL:2) > 0
-	PRINTFORML %CALLNAME:(ARG:0)%との仲が深まった気がする…
+IF (ABL:ARG:親密 - LOCAL:2) > 0
+	PRINTFORML %CALLNAME:ARG%との仲が深まった気がする…
 ENDIF
 ;アイドルマスター技解放報告
-IF ABL:(ARG:0):親密 == 20 && CFLAG:(ARG:0):アイドルマスター技 == 0
-	PRINTFORMW 信頼が深まったことで、%CALLNAME:(ARG:0)%の新たな力が解放された…
-	PRINTFORMW <%CALLNAME:(ARG:0)%は%ABLNAME:(600 + ARG:0)%を修得した>
-	CFLAG:(ARG:0):アイドルマスター技 = (600 + ARG:0)
+IF ABL:ARG:親密 == 20 && CFLAG:ARG:アイドルマスター技 == 0
+	PRINTFORMW 信頼が深まったことで、%CALLNAME:(ARG)%の新たな力が解放された…
+	PRINTFORMW <%CALLNAME:(ARG)%は%SONGNAME:(300 + ARG)%を修得した>
+	CFLAG:ARG:アイドルマスター技 = (300 + ARG)
 ENDIF

@@ -412,9 +412,18 @@ RETURN 1
 ;-------------------------------------------------
 ;560～579,日常派生コマンド
 ;-------------------------------------------------
+;耳かき
+@COM_ABLE560
+;一括管理
+SIF GLOBAL_COMABLE(560)
+	RETURN RESULT
+;相手が居ないとダメ
+SIF !TARGET
+	RETURN 0
+RETURN 1
+
 ;デコちゅー
 @COM_ABLE562
-
 ;一括管理
 SIF GLOBAL_COMABLE(562)
 	RETURN RESULT

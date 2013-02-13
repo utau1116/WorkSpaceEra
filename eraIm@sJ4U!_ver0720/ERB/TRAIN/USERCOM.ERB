@@ -7,10 +7,10 @@ TFLAG:調教自動実行管理 = 0
 TFLAG:COMABLE管理 = !TFLAG:調教自動実行管理
 VARSET LOCAL
 ;前ターンのMASTERが射精した相手をLOCAL:1へセット
-IF TCVAR:MASTER:112 == 1
+IF TCVAR:MASTER:直前のターンの射精した箇所 == 1
 	;V
 	LOCAL:4 = MASTER_POSE(6,1,1)
-ELSEIF TCVAR:MASTER:112 == 2
+ELSEIF TCVAR:MASTER:直前のターンの射精した箇所 == 2
 	;A
 	LOCAL:4 = MASTER_POSE(7,1,1)
 ENDIF
@@ -75,7 +75,7 @@ FOR LOCAL,0,800
 			CALL CUSTOM_COMMAND_NAME, LOCAL, LOCAL:1, 1
 			SIF LOCAL:3
 				RESETCOLOR
-			;ELSEIF LOCAL == 81 && LOCAL:4
+			;ELSEIF LOCAL == [[調教:フェラチオ]] && LOCAL:4
 			;	PRINTFORMC お掃除フェラ[{LOCAL,3}]
 			;ELSEIF LOCAL == 60 && !BEDROOM(CFLAG:PLAYER:現在位置)
 			;	PRINTFORMC 対面立位[{LOCAL,3}]
@@ -249,52 +249,47 @@ ENDCATCH
 ;ARG:1 元処理のLOCAL:1(表示番号)
 ;---------------------------------------------------------------------------------------------
 @CUSTOM_COMMAND_NAME, ARG, ARG:1, ARG:2
-;パートナーに主導権がある時パートナー側がプレイヤーへ行動するコマンドの名前変更
-;IF TFLAG:主導権
-;	;スパンキング
-;	IF SELECTCOM == 40
-;		PRINTFORMC スパンキングされる[{ARG:1,3}]
-;	;鞭
-;	ELSEIF SELECTCOM == 41
-;		PRINTFORMC 鞭で打たれる[{ARG:1,3}]
-;	;針
-;	ELSEIF SELECTCOM == 42
-;		PRINTFORMC 針で刺される[{ARG:1,3}]
-;	;言葉責め
-;	ELSEIF SELECTCOM == 75
-;		PRINTFORMC 言葉責めされる[{ARG:1,3}]
-;	;その他 元のコマンド名
-;	ELSEIF ARG:2
-;		PRINTFORMC %TRAINNAME:ARG%解除[{ARG:1,3}]
-;	ELSE
-;		PRINTFORMC %TRAINNAME:ARG%[{ARG:1,3}]
-;	ENDIF
-;	RETURN 0
-;ENDIF
+VARSET LOCAL
 ;LOCALSに元のコマンド名を設定
-LOCALS = %TRAINNAME:ARG%
-
+;MASTERPOSE()が思ったように機能していないため、パートナー限定(COM_MASAGEも同様)
+IF ARG == [[調教:フェラチオ]]
+	;前ターンのMASTERが射精した相手をLOCAL:1へセット
+	IF TCVAR:MASTER:直前のターンの射精した箇所 == 1 && !ASSIPLAY
+		;V
+		;LOCAL = MASTER_POSE(6,1,1)
+		LOCAL = TARGET
+	ELSEIF TCVAR:MASTER:直前のターンの射精した箇所 == 2 && !ASSIPLAY
+		;A
+		;LOCAL = MASTER_POSE(7,1,1)
+		LOCAL = TARGET
+	ENDIF
+	;お掃除フェラ
+	IF LOCAL
+		LOCALS = お掃除フェラ[{ARG:1,3}]
+	ELSE
+		LOCALS = %TRAINNAME:ARG%[{ARG:1,3}]
+	ENDIF
 ;パートナーに主導権がある時、パートナー側がプレイヤーへ行動するコマンドの名前変更
 ;スパンキング
-SIF SELECTCOM == 40 && TFLAG:主導権
-	LOCALS = スパンキングされる
+ELSEIF ARG == 40 && TFLAG:主導権
+	LOCALS = スパンキングされる[{ARG:1,3}]
 ;鞭
-SIF SELECTCOM == 41 && TFLAG:主導権
-	LOCALS = 鞭で打たれる
+ELSEIF ARG == 41 && TFLAG:主導権
+	LOCALS = 鞭で打たれる[{ARG:1,3}]
 ;針
-SIF SELECTCOM == 42 && TFLAG:主導権
-	LOCALS = 針で刺される
+ELSEIF ARG == 42 && TFLAG:主導権
+	LOCALS = 針で刺される[{ARG:1,3}]
 ;言葉責め
-SIF SELECTCOM == 75 && TFLAG:主導権
-	LOCALS = 言葉責めされる
-
+ELSEIF ARG == 75 && TFLAG:主導権
+	LOCALS = 言葉責めされる[{ARG:1,3}]
 ;浣腸使用前
-SIF SELECTCOM == 46 && TEQUIP:46 == 0
-	LOCALS = 浣腸
+ELSEIF ARG == 46 && TEQUIP:46 == 0
+	LOCALS = 浣腸[{ARG:1,3}]
 ;浣腸・触手浣腸使用後
-SIF (SELECTCOM == 46 || SELECTCOM == 107) && TEQUIP:46
-	LOCALS = 排泄
-IF ARG:2
+ELSEIF (ARG == 46 || ARG == 107) && TEQUIP:46
+	LOCALS = 排泄[{ARG:1,3}]
+;------↑SIF
+ELSEIF ARG:2
 	;PRINTFORMC %TRAINNAME:ARG%解除[{ARG:1,3}]
 	LOCALS = %TRAINNAME:ARG%解除[{ARG:1,3}]
 ELSE

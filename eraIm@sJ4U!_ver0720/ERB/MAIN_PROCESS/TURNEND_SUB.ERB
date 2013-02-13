@@ -7,7 +7,6 @@ FLAG:午前の予定 = 0
 TIME = 0
 TIME:12 = 1
 CALL LEV_記者
-CALL DAY_EFFECT
 
 @TURNEND_昼
 PRINTL 
@@ -19,7 +18,7 @@ CALL CHECK_POINT
 FLAG:午前の予定2 = 0
 TIME = 1
 TIME:12 = 1
-CALL DAY_EFFECT
+;CALL DAY_EFFECT
 ;※ver0.621時点ではコメントアウト
 ;@TURNEND_夕
 
@@ -81,8 +80,9 @@ IF DAY:5 == 6
 	CALL RESET_WORK
 	CALL 楽しい週末
 	PRINTW 一週間が終わりました…（仕事が更新されます）
+	CALL DAY_EFFECT
 ENDIF
 TIME = 0
 TIME:12 = 0
-CALL DAY_EFFECT
-
+;CALL DAY_EFFECT
+;月曜日の朝、活動何周目かを表示
