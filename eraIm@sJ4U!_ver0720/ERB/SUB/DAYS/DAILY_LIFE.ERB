@@ -50,6 +50,11 @@ REPEAT CHARANUM
 REND
 F = CHARANUM - F
 
+;ここでストレス回復
+FOR LOCAL, 11, CHARANUM
+	CALL ストレス調整(LOCAL, -3)
+NEXT
+
 ;CFLAG:A:406 == 0 は個別日常メッセージが用意されていない、とする
 ;CFLAG:A:406 == 0 の時、以下の素質由来の共通メッセージが表示される
 IF CFLAG:A:406 == 0

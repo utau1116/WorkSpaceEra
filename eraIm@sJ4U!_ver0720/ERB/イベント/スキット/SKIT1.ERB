@@ -33,7 +33,6 @@ RETURN 1
 ;スキット実行条件
 @SKIT_ABLE1
 CALL SKIT_ABLE_COMMON, 1
-
 ;一度実行していたらダメ
 SIF FIRSTSKIT(1, 0, 1) != 1
 	RETURN 0

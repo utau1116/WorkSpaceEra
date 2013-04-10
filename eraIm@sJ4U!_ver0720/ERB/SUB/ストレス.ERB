@@ -26,3 +26,14 @@ IF RAND:10000 < LOCAL:1
 ENDIF
 
 RETURN
+
+;ARG	キャラ番号
+;ARG:1	調整量
+@ストレス調整(ARG,ARG:1)
+SIF CFLAG:ARG:勧誘状況 != -1
+	RETURN
+BASE:ARG:ストレス += ARG:1
+SIF BASE:ARG:ストレス < 0
+	BASE :ARG:ストレス = 0
+SIF BASE:ARG:ストレス > 100
+	BASE:ARG:ストレス = 100
